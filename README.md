@@ -4,8 +4,6 @@ Gestion locative moderne, performante et typée.
 
 ## 📸 Aperçu
 
-![Interface PropManager - Gestion des biens](https://github.com/user-attachments/assets/interface-preview.png)
-
 *Interface moderne pour la gestion de votre patrimoine immobilier*
 
 > 💡 **Démo locale :** Ouvrez le fichier `demo.html` dans votre navigateur pour un aperçu interactif de l'interface.
