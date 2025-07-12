@@ -2,17 +2,27 @@
 
 Gestion locative moderne, performante et typée.
 
+## 📸 Aperçu
+
+![Interface PropManager - Gestion des biens](https://github.com/user-attachments/assets/interface-preview.png)
+
+*Interface moderne pour la gestion de votre patrimoine immobilier*
+
+> 💡 **Démo locale :** Ouvrez le fichier `demo.html` dans votre navigateur pour un aperçu interactif de l'interface.
+
 ## 🚧 Migration TypeScript en cours
 
 **État actuel :** Le projet est en cours de migration vers TypeScript (actuellement ~5% TypeScript, 40% JavaScript).
 
 **Objectif :** Migration complète vers TypeScript avec typage strict pour :
+
 - ✅ **Qualité de code** : Détection d'erreurs à la compilation
 - ✅ **Maintenabilité** : Code plus robuste et auto-documenté
 - ✅ **Développement** : IntelliSense, refactoring sécurisé
 - ✅ **Architecture** : Services, hooks et contextes typés
 
 **Progression :**
+
 - ✅ Configuration TypeScript + Vite
 - ✅ Modèles de données typés (`src/types/models.ts`)
 - ✅ Services typés (`src/services/`)
@@ -24,6 +34,7 @@ Gestion locative moderne, performante et typée.
 > **Note :** Toutes les nouvelles contributions doivent être en TypeScript avec types explicites.
 
 ## Fonctionnalités principales
+
 - Gestion des biens, chambres, locataires, loyers, contrats et factures
 - Tableaux de bord financiers et statistiques
 - Historique des loyers et activités
@@ -32,6 +43,7 @@ Gestion locative moderne, performante et typée.
 - Architecture modulaire avec services, hooks et context typés
 
 ## Stack technique
+
 - **React 18** + **TypeScript**
 - **Vite** (build rapide)
 - **Zustand** (state management)
@@ -55,16 +67,19 @@ $ npm run dev
 ```
 
 ## Documentation
+
 - [Guide de bonnes pratiques](./best-practice.md)
 - [Roadmap](./roadmap.md)
 
 ## Contribuer
 
 ### Prérequis
+
 - Node.js ≥ 18, npm ≥ 9
 - Connaissances React, TypeScript
 
 ### Étapes
+
 1. Forkez le projet
 2. Créez une branche : `git checkout -b feat/nom-fonctionnalite`
 3. Développez avec `npm run dev`
@@ -73,6 +88,7 @@ $ npm run dev
 6. Pull Request avec description détaillée
 
 ### Bonnes pratiques
+
 - **Types explicites TypeScript obligatoires** pour toutes les nouvelles contributions
 - **Migration progressive** : convertir JavaScript → TypeScript lors des modifications
 - Hooks personnalisés pour la logique métier
@@ -80,6 +96,7 @@ $ npm run dev
 - Suivez le [guide de bonnes pratiques](./best-practice.md)
 
 ### Aide à la migration
+
 - Consultez `src/types/models.ts` pour les types de base
 - Utilisez les services typés comme modèles (`src/services/BienService.ts`)
 - Référez-vous aux hooks typés (`src/hooks/useBiens.ts`)
