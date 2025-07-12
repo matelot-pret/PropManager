@@ -6,6 +6,8 @@ Gestion locative moderne, performante et typée.
 
 *Interface moderne pour la gestion de votre patrimoine immobilier*
 
+![Aperçu de l’interface](./assets/interface-preview.png)
+
 > 💡 **Démo locale :** Ouvrez le fichier `demo.html` dans votre navigateur pour un aperçu interactif de l'interface.
 
 ## 🚧 Migration TypeScript en cours
