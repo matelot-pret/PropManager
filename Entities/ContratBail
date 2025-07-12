@@ -1,0 +1,71 @@
+{
+  "name": "ContratBail",
+  "type": "object",
+  "properties": {
+    "chambre_id": {
+      "type": "string",
+      "description": "ID de la chambre louée"
+    },
+    "locataire_id": {
+      "type": "string",
+      "description": "ID du locataire"
+    },
+    "date_debut": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de début du bail"
+    },
+    "date_fin": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de fin du bail"
+    },
+    "loyer_mensuel": {
+      "type": "number",
+      "description": "Montant du loyer mensuel"
+    },
+    "charges_mensuelles": {
+      "type": "number",
+      "description": "Montant des charges mensuelles"
+    },
+    "depot_garantie": {
+      "type": "number",
+      "description": "Montant du dépôt de garantie versé"
+    },
+    "type_bail": {
+      "type": "string",
+      "enum": [
+        "habitation",
+        "commercial",
+        "meuble",
+        "non_meuble"
+      ],
+      "description": "Type de bail"
+    },
+    "duree_mois": {
+      "type": "number",
+      "description": "Durée du bail en mois"
+    },
+    "statut": {
+      "type": "string",
+      "enum": [
+        "actif",
+        "expire",
+        "resilie",
+        "en_cours"
+      ],
+      "default": "en_cours",
+      "description": "Statut du contrat"
+    },
+    "conditions_particulieres": {
+      "type": "string",
+      "description": "Conditions particulières du bail"
+    }
+  },
+  "required": [
+    "chambre_id",
+    "locataire_id",
+    "date_debut",
+    "loyer_mensuel"
+  ]
+}

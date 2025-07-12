@@ -1,0 +1,77 @@
+{
+  "name": "Travaux",
+  "type": "object",
+  "properties": {
+    "bien_id": {
+      "type": "string",
+      "description": "ID du bien concerné"
+    },
+    "titre": {
+      "type": "string",
+      "description": "Titre des travaux"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description détaillée des travaux"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "maintenance",
+        "reparation",
+        "amelioration",
+        "urgence",
+        "entretien"
+      ],
+      "description": "Type de travaux"
+    },
+    "priorite": {
+      "type": "string",
+      "enum": ["basse", "normale", "haute", "urgente"],
+      "default": "normale",
+      "description": "Niveau de priorité"
+    },
+    "cout_estime": {
+      "type": "number",
+      "description": "Coût estimé des travaux"
+    },
+    "cout_reel": {
+      "type": "number",
+      "description": "Coût réel des travaux"
+    },
+    "prestataire": {
+      "type": "string",
+      "description": "Nom du prestataire/artisan"
+    },
+    "telephone_prestataire": {
+      "type": "string",
+      "description": "Téléphone du prestataire"
+    },
+    "date_demande": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de la demande"
+    },
+    "date_prevue": {
+      "type": "string",
+      "format": "date",
+      "description": "Date prévue de réalisation"
+    },
+    "date_realisation": {
+      "type": "string",
+      "format": "date",
+      "description": "Date de réalisation effective"
+    },
+    "statut": {
+      "type": "string",
+      "enum": ["planifie", "en_cours", "termine", "annule", "en_attente_devis"],
+      "default": "planifie",
+      "description": "Statut des travaux"
+    },
+    "commentaires": {
+      "type": "string",
+      "description": "Commentaires et notes"
+    }
+  },
+  "required": ["bien_id", "titre", "description", "type"]
+}
