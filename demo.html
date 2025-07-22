@@ -27,8 +27,8 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      "use strict";
+
+    <script type="text/babel">
       // ===========================================
       // CONFIGURATION DES CHEMINS D'ACCÈS
       // ===========================================
@@ -177,31 +177,44 @@
       const mockBiens = [
         {
           id: 1,
-          nom: "Maison Anderlecht",
-          type: "maison",
+          nom: "Appartement Anderlecht",
+          type: "appartement",
           adresse: "Rue des Tournesols 29, 1070 Anderlecht",
           surface: 85,
-          nb_pieces: 6,
+          nb_pieces: 4,
           loyer_mensuel: 1200,
           charges: 150,
           depot_garantie: 2400,
           statut: "loue",
-          description:
-            "Maison dans la commune d'Anderlecht avec 4 chambres, 1 cuisine et 1 salon",
+          description: "Appartement dans la commune d'anderlecht",
         },
         {
           id: 2,
           nom: "Maison Charleroi",
           type: "maison",
           adresse: "Grand'Rue 38, 6100 Montignies-Sur-Sambre",
-          surface: 125,
-          nb_pieces: 7,
+          surface: 25,
+          nb_pieces: 5,
           loyer_mensuel: 800,
           charges: 80,
           depot_garantie: 1600,
           statut: "libre",
           description:
-            "Maison nouvellement rénové avec 5 chambres, 1 cuisine, 1 salon dans la commune de Montignies-Sur-Sambre",
+            "Maison nouvellement rénové bien placé dans la commune de Montignies-Sur_Sambre",
+        },
+        {
+          id: 3,
+          nom: "Maison Bastogne",
+          type: "maison",
+          adresse: "Rue des Remparts 80, 6600 Bastogne",
+          surface: 120,
+          nb_pieces: 5,
+          loyer_mensuel: 1800,
+          charges: 200,
+          depot_garantie: 3600,
+          statut: "loue",
+          description:
+            "Maison nouvellement rénové avec jardin près du Centre de Bastogne",
         },
       ];
 
@@ -215,7 +228,7 @@
           charges_mensuelles: 50,
           type_chambre: "privee",
           statut: "louee",
-          description: "Chambre spacieuse avec douche partagée",
+          description: "Chambre spacieuse avec balcon",
         },
         {
           id: 2,
@@ -226,84 +239,18 @@
           charges_mensuelles: 50,
           type_chambre: "privee",
           statut: "libre",
-          description: "Chambre cosy avec douche partagée",
+          description: "Chambre cosy avec rangements",
         },
         {
           id: 3,
-          bien_id: 1,
-          nom: "Chambre 3",
-          surface: 14,
-          loyer_mensuel: 580,
-          charges_mensuelles: 50,
-          type_chambre: "privee",
-          statut: "libre",
-          description: "Chambre avec douche partagée",
-        },
-        {
-          id: 4,
-          bien_id: 1,
+          bien_id: 3,
           nom: "Chambre Master",
           surface: 20,
-          loyer_mensuel: 750,
+          loyer_mensuel: 800,
           charges_mensuelles: 70,
           type_chambre: "privee",
           statut: "louee",
-          description: "Grande chambre avec douche privée incluse",
-        },
-        {
-          id: 5,
-          bien_id: 2,
-          nom: "Chambre A",
-          surface: 12,
-          loyer_mensuel: 400,
-          charges_mensuelles: 40,
-          type_chambre: "privee",
-          statut: "libre",
-          description: "Chambre avec douche partagée",
-        },
-        {
-          id: 6,
-          bien_id: 2,
-          nom: "Chambre B",
-          surface: 13,
-          loyer_mensuel: 420,
-          charges_mensuelles: 40,
-          type_chambre: "privee",
-          statut: "libre",
-          description: "Chambre avec douche partagée",
-        },
-        {
-          id: 7,
-          bien_id: 2,
-          nom: "Chambre C",
-          surface: 11,
-          loyer_mensuel: 380,
-          charges_mensuelles: 40,
-          type_chambre: "privee",
-          statut: "libre",
-          description: "Chambre avec douche partagée",
-        },
-        {
-          id: 8,
-          bien_id: 2,
-          nom: "Chambre D",
-          surface: 12,
-          loyer_mensuel: 400,
-          charges_mensuelles: 40,
-          type_chambre: "privee",
-          statut: "libre",
-          description: "Chambre avec douche partagée",
-        },
-        {
-          id: 9,
-          bien_id: 2,
-          nom: "Suite Parentale",
-          surface: 18,
-          loyer_mensuel: 500,
-          charges_mensuelles: 50,
-          type_chambre: "privee",
-          statut: "libre",
-          description: "Chambre avec douche privée incluse",
+          description: "Grande chambre avec salle de bain privée",
         },
       ];
 
@@ -337,7 +284,7 @@
           age: 24,
           profession: "Étudiant",
           sera_seul: true,
-          chambre_id: 4,
+          chambre_id: 3,
           statut: "actif",
           co_occupants: [],
         },
@@ -383,39 +330,15 @@
         },
         {
           id: 3,
-          chambre_id: 4,
+          chambre_id: 3,
           mois: 7,
           annee: 2025,
-          montant_total: 820,
+          montant_total: 870,
           montant_charges: 70,
           date_echeance: "2025-07-05",
           date_paiement: "2025-07-04",
           mode_paiement: "virement",
           statut: "paye",
-        },
-        {
-          id: 4,
-          chambre_id: 4,
-          mois: 6,
-          annee: 2025,
-          montant_total: 820,
-          montant_charges: 70,
-          date_echeance: "2025-06-05",
-          date_paiement: "2025-06-02",
-          mode_paiement: "virement",
-          statut: "paye",
-        },
-        {
-          id: 5,
-          chambre_id: 1,
-          mois: 8,
-          annee: 2025,
-          montant_total: 650,
-          montant_charges: 50,
-          date_echeance: "2025-08-05",
-          date_paiement: null,
-          mode_paiement: null,
-          statut: "en_attente",
         },
       ];
 
@@ -434,13 +357,13 @@
         },
         {
           id: 2,
-          chambre_id: 4,
+          chambre_id: 3,
           locataire_id: 2,
           date_debut: "2025-03-01",
           date_fin: "2026-02-28",
-          loyer_mensuel: 750,
+          loyer_mensuel: 800,
           charges_mensuelles: 70,
-          depot_garantie: 1500,
+          depot_garantie: 1600,
           type_bail: "non_meuble",
           statut: "actif",
         },
@@ -535,7 +458,7 @@
                           key: "title",
                           className: "font-bold text-slate-900 text-lg",
                         },
-                        "Ger'immo"
+                        "PropManager"
                       ),
                       React.createElement(
                         "p",
@@ -691,13 +614,7 @@
                             key: "value",
                             className: "font-bold text-green-600",
                           },
-                          `${mockChambres
-                            .filter((c) => c.statut === "louee")
-                            .reduce(
-                              (total, c) =>
-                                total + c.loyer_mensuel + c.charges_mensuelles,
-                              0
-                            )} €`
+                          "2320 €"
                         ),
                       ]
                     ),
@@ -726,20 +643,13 @@
           },
           {
             title: "Revenus Mensuels",
-            value: `${mockChambres
-              .filter((c) => c.statut === "louee")
-              .reduce(
-                (total, c) => total + c.loyer_mensuel + c.charges_mensuelles,
-                0
-              )} €`,
+            value: "2320 €",
             icon: "💰",
             color: "purple",
           },
           {
             title: "Loyers en Retard",
-            value: mockLoyers.filter(
-              (l) => l.statut === "en_retard" || l.statut === "en_attente"
-            ).length,
+            value: mockLoyers.filter((l) => l.statut === "en_retard").length,
             icon: "⚠️",
             color: "red",
           },
@@ -899,15 +809,7 @@
                                   className:
                                     "text-2xl font-bold text-slate-900",
                                 },
-                                `${mockChambres
-                                  .filter((c) => c.statut === "louee")
-                                  .reduce(
-                                    (total, c) =>
-                                      total +
-                                      c.loyer_mensuel +
-                                      c.charges_mensuelles,
-                                    0
-                                  )} €`
+                                "2320 €"
                               ),
                               React.createElement(
                                 "div",
@@ -947,12 +849,7 @@
                                   className:
                                     "text-2xl font-bold text-slate-900",
                                 },
-                                `${mockChambres
-                                  .filter((c) => c.statut === "louee")
-                                  .reduce(
-                                    (total, c) => total + c.charges_mensuelles,
-                                    0
-                                  )} €`
+                                "320 €"
                               ),
                               React.createElement(
                                 "div",
@@ -992,12 +889,7 @@
                                   className:
                                     "text-2xl font-bold text-green-600",
                                 },
-                                `${mockChambres
-                                  .filter((c) => c.statut === "louee")
-                                  .reduce(
-                                    (total, c) => total + c.loyer_mensuel,
-                                    0
-                                  )} €`
+                                "2000 €"
                               ),
                               React.createElement(
                                 "div",
@@ -1020,159 +912,6 @@
                                 ]
                               ),
                             ]),
-                          ]
-                        ),
-                      ]
-                    ),
-
-                    React.createElement(
-                      "div",
-                      {
-                        key: "loyers-section",
-                        className: "bg-white rounded-lg shadow-lg p-6",
-                      },
-                      [
-                        React.createElement(
-                          "h3",
-                          {
-                            key: "title",
-                            className:
-                              "text-xl font-bold text-slate-900 mb-4 flex items-center gap-2",
-                          },
-                          [
-                            React.createElement("span", { key: "icon" }, "📋"),
-                            "État des Loyers",
-                          ]
-                        ),
-                        React.createElement(
-                          "div",
-                          {
-                            key: "loyers-summary",
-                            className: "space-y-4",
-                          },
-                          [
-                            React.createElement(
-                              "div",
-                              {
-                                key: "stats-grid",
-                                className: "grid grid-cols-2 gap-4",
-                              },
-                              [
-                                React.createElement(
-                                  "div",
-                                  {
-                                    key: "payes",
-                                    className:
-                                      "text-center p-3 bg-green-50 rounded-lg",
-                                  },
-                                  [
-                                    React.createElement(
-                                      "div",
-                                      {
-                                        key: "number",
-                                        className:
-                                          "text-2xl font-bold text-green-600",
-                                      },
-                                      mockLoyers.filter(
-                                        (l) => l.statut === "paye"
-                                      ).length
-                                    ),
-                                    React.createElement(
-                                      "div",
-                                      {
-                                        key: "label",
-                                        className: "text-sm text-green-800",
-                                      },
-                                      "Payés"
-                                    ),
-                                  ]
-                                ),
-                                React.createElement(
-                                  "div",
-                                  {
-                                    key: "en-attente",
-                                    className:
-                                      "text-center p-3 bg-yellow-50 rounded-lg",
-                                  },
-                                  [
-                                    React.createElement(
-                                      "div",
-                                      {
-                                        key: "number",
-                                        className:
-                                          "text-2xl font-bold text-yellow-600",
-                                      },
-                                      mockLoyers.filter(
-                                        (l) =>
-                                          l.statut === "en_attente" ||
-                                          l.statut === "en_retard"
-                                      ).length
-                                    ),
-                                    React.createElement(
-                                      "div",
-                                      {
-                                        key: "label",
-                                        className: "text-sm text-yellow-800",
-                                      },
-                                      "En attente/Retard"
-                                    ),
-                                  ]
-                                ),
-                              ]
-                            ),
-                            React.createElement(
-                              "div",
-                              {
-                                key: "recent-payments",
-                                className: "space-y-2",
-                              },
-                              [
-                                React.createElement(
-                                  "h4",
-                                  {
-                                    key: "subtitle",
-                                    className:
-                                      "font-semibold text-slate-700 text-sm",
-                                  },
-                                  "Derniers paiements"
-                                ),
-                                ...mockLoyers
-                                  .filter((l) => l.statut === "paye")
-                                  .slice(-3)
-                                  .map((loyer, index) => {
-                                    const chambre = mockChambres.find(
-                                      (c) => c.id === loyer.chambre_id
-                                    );
-                                    const locataire = mockLocataires.find(
-                                      (l) => l.chambre_id === loyer.chambre_id
-                                    );
-                                    return React.createElement(
-                                      "div",
-                                      {
-                                        key: `payment-${index}`,
-                                        className:
-                                          "flex justify-between items-center text-sm bg-slate-50 p-2 rounded",
-                                      },
-                                      [
-                                        React.createElement(
-                                          "span",
-                                          { key: "info" },
-                                          `${locataire?.prenom} ${locataire?.nom} - ${chambre?.nom}`
-                                        ),
-                                        React.createElement(
-                                          "span",
-                                          {
-                                            key: "montant",
-                                            className:
-                                              "font-semibold text-green-600",
-                                          },
-                                          `${loyer.montant_total} €`
-                                        ),
-                                      ]
-                                    );
-                                  }),
-                              ]
-                            ),
                           ]
                         ),
                       ]
@@ -1349,15 +1088,7 @@
                                     key: "value",
                                     className: "font-semibold",
                                   },
-                                  mockChambres.length > 0
-                                    ? `${Math.round(
-                                        (mockChambres.filter(
-                                          (c) => c.statut === "louee"
-                                        ).length /
-                                          mockChambres.length) *
-                                          100
-                                      )}%`
-                                    : "0%"
+                                  "75%"
                                 ),
                               ]
                             ),
@@ -1374,7 +1105,7 @@
       };
 
       // Page Biens
-      const BiensPage = ({ onGererChambres }) => {
+      const BiensPage = () => {
         return React.createElement(
           "div",
           {
@@ -1521,85 +1252,54 @@
                           "div",
                           {
                             key: "details",
-                            className: "space-y-3 text-sm",
+                            className: "grid grid-cols-2 gap-4 text-sm",
                           },
                           [
+                            bien.surface &&
+                              React.createElement(
+                                "div",
+                                {
+                                  key: "surface",
+                                  className: "flex items-center gap-2",
+                                },
+                                [
+                                  React.createElement(
+                                    "span",
+                                    { key: "icon" },
+                                    "📐"
+                                  ),
+                                  React.createElement(
+                                    "span",
+                                    { key: "text" },
+                                    `${bien.surface} m²`
+                                  ),
+                                ]
+                              ),
+                            bien.nb_pieces &&
+                              React.createElement(
+                                "div",
+                                {
+                                  key: "pieces",
+                                  className: "flex items-center gap-2",
+                                },
+                                [
+                                  React.createElement(
+                                    "span",
+                                    { key: "icon" },
+                                    "🏠"
+                                  ),
+                                  React.createElement(
+                                    "span",
+                                    { key: "text" },
+                                    `${bien.nb_pieces} pièces`
+                                  ),
+                                ]
+                              ),
                             React.createElement(
                               "div",
                               {
-                                key: "surface",
-                                className:
-                                  "flex items-center gap-2 text-slate-600",
-                              },
-                              [
-                                React.createElement(
-                                  "span",
-                                  { key: "icon" },
-                                  "📐"
-                                ),
-                                React.createElement(
-                                  "span",
-                                  { key: "text" },
-                                  `${bien.surface} m²`
-                                ),
-                              ]
-                            ),
-                            React.createElement(
-                              "div",
-                              {
-                                key: "pieces",
-                                className:
-                                  "flex items-center gap-2 text-slate-600",
-                              },
-                              [
-                                React.createElement(
-                                  "span",
-                                  { key: "icon" },
-                                  "🏠"
-                                ),
-                                React.createElement(
-                                  "span",
-                                  { key: "text" },
-                                  `${bien.nb_pieces} pièces`
-                                ),
-                              ]
-                            ),
-                            React.createElement(
-                              "div",
-                              {
-                                key: "chambres-stats",
-                                className:
-                                  "flex items-center gap-2 text-slate-600",
-                              },
-                              [
-                                React.createElement(
-                                  "span",
-                                  { key: "icon" },
-                                  "�️"
-                                ),
-                                React.createElement(
-                                  "span",
-                                  { key: "text" },
-                                  `${
-                                    mockChambres.filter(
-                                      (c) =>
-                                        c.bien_id === bien.id &&
-                                        c.statut === "louee"
-                                    ).length
-                                  }/${
-                                    mockChambres.filter(
-                                      (c) => c.bien_id === bien.id
-                                    ).length
-                                  } chambres occupées`
-                                ),
-                              ]
-                            ),
-                            React.createElement(
-                              "div",
-                              {
-                                key: "revenus",
-                                className:
-                                  "flex items-center gap-2 text-green-600 font-semibold",
+                                key: "loyer",
+                                className: "flex items-center gap-2",
                               },
                               [
                                 React.createElement(
@@ -1609,20 +1309,11 @@
                                 ),
                                 React.createElement(
                                   "span",
-                                  { key: "text" },
-                                  `${mockChambres
-                                    .filter(
-                                      (c) =>
-                                        c.bien_id === bien.id &&
-                                        c.statut === "louee"
-                                    )
-                                    .reduce(
-                                      (total, c) =>
-                                        total +
-                                        c.loyer_mensuel +
-                                        c.charges_mensuelles,
-                                      0
-                                    )} € /mois`
+                                  {
+                                    key: "text",
+                                    className: "font-semibold text-green-600",
+                                  },
+                                  `${bien.loyer_mensuel} €`
                                 ),
                               ]
                             ),
@@ -1641,9 +1332,7 @@
                                       statusColors[bien.statut]
                                     }`,
                                   },
-                                  bien.statut === "loue"
-                                    ? "Partiellement loué"
-                                    : "Libre"
+                                  bien.statut === "loue" ? "Loué" : "Libre"
                                 ),
                               ]
                             ),
@@ -1714,8 +1403,6 @@
                             key: "chambres",
                             className:
                               "w-full bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded mt-2 flex items-center justify-center gap-2",
-                            onClick: () =>
-                              onGererChambres && onGererChambres(bien.id),
                           },
                           [
                             React.createElement(
@@ -2014,15 +1701,7 @@
       };
 
       // Page Chambres
-      const ChambresPage = ({ selectedBienId, onRetourBiens }) => {
-        const chambresToShow = selectedBienId
-          ? mockChambres.filter((c) => c.bien_id === selectedBienId)
-          : mockChambres;
-
-        const selectedBien = selectedBienId
-          ? mockBiens.find((b) => b.id === selectedBienId)
-          : null;
-
+      const ChambresPage = () => {
         return React.createElement(
           "div",
           {
@@ -2037,33 +1716,13 @@
               },
               [
                 React.createElement("div", { key: "title" }, [
-                  selectedBien &&
-                    React.createElement(
-                      "button",
-                      {
-                        key: "back-button",
-                        onClick: onRetourBiens,
-                        className:
-                          "flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-4 text-sm font-medium",
-                      },
-                      [
-                        React.createElement("span", { key: "arrow" }, "←"),
-                        React.createElement(
-                          "span",
-                          { key: "text" },
-                          "Retour aux biens"
-                        ),
-                      ]
-                    ),
                   React.createElement(
                     "h1",
                     {
                       key: "h1",
                       className: "text-4xl font-bold text-slate-900 mb-2",
                     },
-                    selectedBien
-                      ? `Chambres - ${selectedBien.nom}`
-                      : "Toutes les Chambres"
+                    "Chambres"
                   ),
                   React.createElement(
                     "p",
@@ -2071,83 +1730,9 @@
                       key: "p",
                       className: "text-slate-600 text-lg",
                     },
-                    selectedBien
-                      ? `Gérez les ${chambresToShow.length} chambres de ce bien`
-                      : "Gérez les chambres de vos biens"
+                    "Gérez les chambres de vos biens"
                   ),
                 ]),
-                selectedBien &&
-                  React.createElement(
-                    "div",
-                    {
-                      key: "bien-info",
-                      className:
-                        "bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm",
-                    },
-                    [
-                      React.createElement(
-                        "div",
-                        {
-                          key: "stats",
-                          className: "space-y-2",
-                        },
-                        [
-                          React.createElement(
-                            "div",
-                            {
-                              key: "occupation",
-                              className:
-                                "flex items-center gap-2 text-blue-700",
-                            },
-                            [
-                              React.createElement(
-                                "span",
-                                { key: "icon" },
-                                "👥"
-                              ),
-                              React.createElement(
-                                "span",
-                                { key: "text" },
-                                `${
-                                  chambresToShow.filter(
-                                    (c) => c.statut === "louee"
-                                  ).length
-                                }/${chambresToShow.length} chambres occupées`
-                              ),
-                            ]
-                          ),
-                          React.createElement(
-                            "div",
-                            {
-                              key: "revenus",
-                              className:
-                                "flex items-center gap-2 text-green-700 font-semibold",
-                            },
-                            [
-                              React.createElement(
-                                "span",
-                                { key: "icon" },
-                                "💰"
-                              ),
-                              React.createElement(
-                                "span",
-                                { key: "text" },
-                                `${chambresToShow
-                                  .filter((c) => c.statut === "louee")
-                                  .reduce(
-                                    (total, c) =>
-                                      total +
-                                      c.loyer_mensuel +
-                                      c.charges_mensuelles,
-                                    0
-                                  )} € /mois`
-                              ),
-                            ]
-                          ),
-                        ]
-                      ),
-                    ]
-                  ),
               ]
             ),
 
@@ -2157,361 +1742,307 @@
                 key: "grid",
                 className: "grid md:grid-cols-2 lg:grid-cols-3 gap-6",
               },
-              chambresToShow.length === 0
-                ? React.createElement(
-                    "div",
-                    {
-                      key: "no-chambres",
-                      className:
-                        "col-span-full bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center",
-                    },
-                    [
-                      React.createElement(
-                        "div",
-                        {
-                          key: "icon",
-                          className: "text-6xl mb-4",
-                        },
-                        "🛏️"
-                      ),
-                      React.createElement(
-                        "h3",
-                        {
-                          key: "title",
-                          className: "text-xl font-semibold text-gray-600 mb-2",
-                        },
-                        "Aucune chambre trouvée"
-                      ),
-                      React.createElement(
-                        "p",
-                        {
-                          key: "message",
-                          className: "text-gray-500",
-                        },
-                        selectedBien
-                          ? `Ce bien ne contient aucune chambre pour le moment.`
-                          : `Aucune chambre n'a été créée pour le moment.`
-                      ),
-                    ]
-                  )
-                : chambresToShow.map((chambre) => {
-                    const bien = mockBiens.find(
-                      (b) => b.id === chambre.bien_id
-                    );
-                    const locataire = mockLocataires.find(
-                      (l) => l.chambre_id === chambre.id
-                    );
+              mockChambres.map((chambre) => {
+                const bien = mockBiens.find((b) => b.id === chambre.bien_id);
+                const locataire = mockLocataires.find(
+                  (l) => l.chambre_id === chambre.id
+                );
 
-                    return React.createElement(
+                return React.createElement(
+                  "div",
+                  {
+                    key: chambre.id,
+                    className:
+                      "bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow border-0",
+                  },
+                  [
+                    React.createElement(
                       "div",
                       {
-                        key: chambre.id,
-                        className:
-                          "bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow border-0",
+                        key: "header",
+                        className: "p-6 pb-4",
                       },
                       [
                         React.createElement(
                           "div",
                           {
-                            key: "header",
-                            className: "p-6 pb-4",
+                            key: "title-row",
+                            className: "flex items-start justify-between",
                           },
                           [
                             React.createElement(
                               "div",
                               {
-                                key: "title-row",
-                                className: "flex items-start justify-between",
+                                key: "title-info",
+                                className: "flex items-center gap-3",
                               },
                               [
                                 React.createElement(
                                   "div",
                                   {
-                                    key: "title-info",
-                                    className: "flex items-center gap-3",
+                                    key: "icon",
+                                    className:
+                                      "w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center",
                                   },
-                                  [
-                                    React.createElement(
-                                      "div",
-                                      {
-                                        key: "icon",
-                                        className:
-                                          "w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center",
-                                      },
-                                      React.createElement(
-                                        "span",
-                                        { className: "text-slate-600 text-lg" },
-                                        "🛏️"
-                                      )
-                                    ),
-                                    React.createElement(
-                                      "div",
-                                      { key: "info" },
-                                      [
-                                        React.createElement(
-                                          "h3",
-                                          {
-                                            key: "nom",
-                                            className:
-                                              "text-lg font-bold text-slate-900",
-                                          },
-                                          chambre.nom
-                                        ),
-                                        React.createElement(
-                                          "span",
-                                          {
-                                            key: "statut",
-                                            className: `inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 ${
-                                              statusColors[chambre.statut]
-                                            }`,
-                                          },
-                                          chambre.statut === "louee"
-                                            ? "Louée"
-                                            : "Libre"
-                                        ),
-                                      ]
-                                    ),
-                                  ]
+                                  React.createElement(
+                                    "span",
+                                    { className: "text-slate-600 text-lg" },
+                                    "🛏️"
+                                  )
+                                ),
+                                React.createElement("div", { key: "info" }, [
+                                  React.createElement(
+                                    "h3",
+                                    {
+                                      key: "nom",
+                                      className:
+                                        "text-lg font-bold text-slate-900",
+                                    },
+                                    chambre.nom
+                                  ),
+                                  React.createElement(
+                                    "span",
+                                    {
+                                      key: "statut",
+                                      className: `inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 ${
+                                        statusColors[chambre.statut]
+                                      }`,
+                                    },
+                                    chambre.statut === "louee"
+                                      ? "Louée"
+                                      : "Libre"
+                                  ),
+                                ]),
+                              ]
+                            ),
+                          ]
+                        ),
+                      ]
+                    ),
+
+                    React.createElement(
+                      "div",
+                      {
+                        key: "content",
+                        className: "p-6 pt-2 space-y-3",
+                      },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "bien",
+                            className: "text-sm text-slate-600",
+                          },
+                          [
+                            React.createElement("span", { key: "icon" }, "🏢 "),
+                            React.createElement(
+                              "span",
+                              { key: "text" },
+                              bien?.nom || "Bien non trouvé"
+                            ),
+                          ]
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "details",
+                            className: "grid grid-cols-2 gap-3 text-sm",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "surface",
+                                className: "flex items-center justify-between",
+                              },
+                              [
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "label",
+                                    className: "text-slate-500",
+                                  },
+                                  "📐 Surface"
+                                ),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "value",
+                                    className: "font-medium text-slate-800",
+                                  },
+                                  `${chambre.surface || "N/A"} m²`
+                                ),
+                              ]
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "loyer",
+                                className: "flex items-center justify-between",
+                              },
+                              [
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "label",
+                                    className: "text-slate-500",
+                                  },
+                                  "💰 Loyer"
+                                ),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "value",
+                                    className:
+                                      "font-bold text-lg text-green-600",
+                                  },
+                                  `${chambre.loyer_mensuel} €`
+                                ),
+                              ]
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "type",
+                                className: "flex items-center justify-between",
+                              },
+                              [
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "label",
+                                    className: "text-slate-500",
+                                  },
+                                  "🏠 Type"
+                                ),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "value",
+                                    className:
+                                      "font-medium text-slate-800 capitalize",
+                                  },
+                                  chambre.type_chambre === "privee"
+                                    ? "Privée"
+                                    : "Partagée"
                                 ),
                               ]
                             ),
                           ]
                         ),
 
+                        chambre.statut === "louee" &&
+                          locataire &&
+                          React.createElement(
+                            "div",
+                            {
+                              key: "locataire",
+                              className:
+                                "bg-blue-50 border-l-4 border-blue-400 p-3 rounded-md text-sm",
+                            },
+                            [
+                              React.createElement(
+                                "div",
+                                {
+                                  key: "info",
+                                  className:
+                                    "flex items-center gap-2 font-semibold text-blue-800",
+                                },
+                                [
+                                  React.createElement(
+                                    "span",
+                                    { key: "icon" },
+                                    "👤"
+                                  ),
+                                  React.createElement(
+                                    "span",
+                                    { key: "text" },
+                                    `Loué par ${locataire.prenom} ${locataire.nom}`
+                                  ),
+                                ]
+                              ),
+                            ]
+                          ),
+                      ]
+                    ),
+
+                    React.createElement(
+                      "div",
+                      {
+                        key: "footer",
+                        className: "p-6 pt-0",
+                      },
+                      [
                         React.createElement(
                           "div",
                           {
-                            key: "content",
-                            className: "p-6 pt-2 space-y-3",
+                            key: "actions",
+                            className: "flex gap-2 mb-2",
                           },
                           [
                             React.createElement(
-                              "div",
+                              "button",
                               {
-                                key: "bien",
-                                className: "text-sm text-slate-600",
+                                key: "modifier",
+                                className:
+                                  "flex-1 border border-slate-300 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 px-3 py-2 rounded text-sm flex items-center justify-center gap-2",
                               },
                               [
                                 React.createElement(
                                   "span",
                                   { key: "icon" },
-                                  "🏢 "
+                                  "✏️"
                                 ),
                                 React.createElement(
                                   "span",
                                   { key: "text" },
-                                  bien?.nom || "Bien non trouvé"
-                                ),
-                              ]
-                            ),
-                            React.createElement(
-                              "div",
-                              {
-                                key: "details",
-                                className: "grid grid-cols-2 gap-3 text-sm",
-                              },
-                              [
-                                React.createElement(
-                                  "div",
-                                  {
-                                    key: "surface",
-                                    className:
-                                      "flex items-center justify-between",
-                                  },
-                                  [
-                                    React.createElement(
-                                      "span",
-                                      {
-                                        key: "label",
-                                        className: "text-slate-500",
-                                      },
-                                      "📐 Surface"
-                                    ),
-                                    React.createElement(
-                                      "span",
-                                      {
-                                        key: "value",
-                                        className: "font-medium text-slate-800",
-                                      },
-                                      `${chambre.surface || "N/A"} m²`
-                                    ),
-                                  ]
-                                ),
-                                React.createElement(
-                                  "div",
-                                  {
-                                    key: "loyer",
-                                    className:
-                                      "flex items-center justify-between",
-                                  },
-                                  [
-                                    React.createElement(
-                                      "span",
-                                      {
-                                        key: "label",
-                                        className: "text-slate-500",
-                                      },
-                                      "💰 Loyer"
-                                    ),
-                                    React.createElement(
-                                      "span",
-                                      {
-                                        key: "value",
-                                        className:
-                                          "font-bold text-lg text-green-600",
-                                      },
-                                      `${chambre.loyer_mensuel} €`
-                                    ),
-                                  ]
-                                ),
-                                React.createElement(
-                                  "div",
-                                  {
-                                    key: "type",
-                                    className:
-                                      "flex items-center justify-between",
-                                  },
-                                  [
-                                    React.createElement(
-                                      "span",
-                                      {
-                                        key: "label",
-                                        className: "text-slate-500",
-                                      },
-                                      "🏠 Type"
-                                    ),
-                                    React.createElement(
-                                      "span",
-                                      {
-                                        key: "value",
-                                        className:
-                                          "font-medium text-slate-800 capitalize",
-                                      },
-                                      chambre.type_chambre === "privee"
-                                        ? "Privée"
-                                        : "Partagée"
-                                    ),
-                                  ]
-                                ),
-                              ]
-                            ),
-
-                            chambre.statut === "louee" &&
-                              locataire &&
-                              React.createElement(
-                                "div",
-                                {
-                                  key: "locataire",
-                                  className:
-                                    "bg-blue-50 border-l-4 border-blue-400 p-3 rounded-md text-sm",
-                                },
-                                [
-                                  React.createElement(
-                                    "div",
-                                    {
-                                      key: "info",
-                                      className:
-                                        "flex items-center gap-2 font-semibold text-blue-800",
-                                    },
-                                    [
-                                      React.createElement(
-                                        "span",
-                                        { key: "icon" },
-                                        "👤"
-                                      ),
-                                      React.createElement(
-                                        "span",
-                                        { key: "text" },
-                                        `Loué par ${locataire.prenom} ${locataire.nom}`
-                                      ),
-                                    ]
-                                  ),
-                                ]
-                              ),
-                          ]
-                        ),
-
-                        React.createElement(
-                          "div",
-                          {
-                            key: "footer",
-                            className: "p-6 pt-0",
-                          },
-                          [
-                            React.createElement(
-                              "div",
-                              {
-                                key: "actions",
-                                className: "flex gap-2 mb-2",
-                              },
-                              [
-                                React.createElement(
-                                  "button",
-                                  {
-                                    key: "modifier",
-                                    className:
-                                      "flex-1 border border-slate-300 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 px-3 py-2 rounded text-sm flex items-center justify-center gap-2",
-                                  },
-                                  [
-                                    React.createElement(
-                                      "span",
-                                      { key: "icon" },
-                                      "✏️"
-                                    ),
-                                    React.createElement(
-                                      "span",
-                                      { key: "text" },
-                                      "Modifier"
-                                    ),
-                                  ]
-                                ),
-                                React.createElement(
-                                  "button",
-                                  {
-                                    key: "supprimer",
-                                    className:
-                                      "flex-1 border border-slate-300 text-red-600 hover:bg-red-50 hover:border-red-200 hover:text-red-700 px-3 py-2 rounded text-sm flex items-center justify-center gap-2",
-                                  },
-                                  [
-                                    React.createElement(
-                                      "span",
-                                      { key: "icon" },
-                                      "🗑️"
-                                    ),
-                                    React.createElement(
-                                      "span",
-                                      { key: "text" },
-                                      "Supprimer"
-                                    ),
-                                  ]
+                                  "Modifier"
                                 ),
                               ]
                             ),
                             React.createElement(
                               "button",
                               {
-                                key: "details",
+                                key: "supprimer",
                                 className:
-                                  "w-full bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded text-sm flex items-center justify-center gap-2",
+                                  "flex-1 border border-slate-300 text-red-600 hover:bg-red-50 hover:border-red-200 hover:text-red-700 px-3 py-2 rounded text-sm flex items-center justify-center gap-2",
                               },
                               [
                                 React.createElement(
                                   "span",
                                   { key: "icon" },
-                                  "👁️"
+                                  "🗑️"
                                 ),
                                 React.createElement(
                                   "span",
                                   { key: "text" },
-                                  "Voir les détails"
+                                  "Supprimer"
                                 ),
                               ]
                             ),
                           ]
                         ),
+                        React.createElement(
+                          "button",
+                          {
+                            key: "details",
+                            className:
+                              "w-full bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded text-sm flex items-center justify-center gap-2",
+                          },
+                          [
+                            React.createElement("span", { key: "icon" }, "👁️"),
+                            React.createElement(
+                              "span",
+                              { key: "text" },
+                              "Voir les détails"
+                            ),
+                          ]
+                        ),
                       ]
-                    );
-                  })
+                    ),
+                  ]
+                );
+              })
             ),
           ]
         );
@@ -2616,29 +2147,11 @@
                               React.createElement(
                                 "th",
                                 {
-                                  key: "bien",
-                                  className:
-                                    "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                },
-                                "Bien"
-                              ),
-                              React.createElement(
-                                "th",
-                                {
                                   key: "chambre",
                                   className:
                                     "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
                                 },
                                 "Chambre"
-                              ),
-                              React.createElement(
-                                "th",
-                                {
-                                  key: "locataire",
-                                  className:
-                                    "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                },
-                                "Locataire"
                               ),
                               React.createElement(
                                 "th",
@@ -2689,13 +2202,6 @@
                             const chambre = mockChambres.find(
                               (c) => c.id === loyer.chambre_id
                             );
-                            const bien = chambre
-                              ? mockBiens.find((b) => b.id === chambre.bien_id)
-                              : null;
-                            const locataire = mockLocataires.find(
-                              (l) => l.chambre_id === loyer.chambre_id
-                            );
-
                             return React.createElement(
                               "tr",
                               {
@@ -2716,85 +2222,11 @@
                                 React.createElement(
                                   "td",
                                   {
-                                    key: "bien",
-                                    className:
-                                      "px-6 py-4 whitespace-nowrap text-sm text-gray-900",
-                                  },
-                                  [
-                                    React.createElement(
-                                      "div",
-                                      { key: "nom" },
-                                      bien?.nom || "Bien inconnu"
-                                    ),
-                                    React.createElement(
-                                      "div",
-                                      {
-                                        key: "type",
-                                        className:
-                                          "text-xs text-gray-500 capitalize",
-                                      },
-                                      bien?.type || "-"
-                                    ),
-                                  ]
-                                ),
-
-                                React.createElement(
-                                  "td",
-                                  {
                                     key: "chambre",
                                     className:
                                       "px-6 py-4 whitespace-nowrap text-sm text-gray-900",
                                   },
-                                  [
-                                    React.createElement(
-                                      "div",
-                                      { key: "nom" },
-                                      chambre?.nom || "Chambre inconnue"
-                                    ),
-                                    React.createElement(
-                                      "div",
-                                      {
-                                        key: "surface",
-                                        className: "text-xs text-gray-500",
-                                      },
-                                      chambre?.surface
-                                        ? `${chambre.surface} m²`
-                                        : "-"
-                                    ),
-                                  ]
-                                ),
-
-                                React.createElement(
-                                  "td",
-                                  {
-                                    key: "locataire",
-                                    className:
-                                      "px-6 py-4 whitespace-nowrap text-sm text-gray-900",
-                                  },
-                                  locataire
-                                    ? [
-                                        React.createElement(
-                                          "div",
-                                          { key: "nom" },
-                                          `${locataire.prenom} ${locataire.nom}`
-                                        ),
-                                        React.createElement(
-                                          "div",
-                                          {
-                                            key: "profession",
-                                            className: "text-xs text-gray-500",
-                                          },
-                                          locataire.profession
-                                        ),
-                                      ]
-                                    : React.createElement(
-                                        "span",
-                                        {
-                                          key: "vide",
-                                          className: "text-gray-400 italic",
-                                        },
-                                        "Aucun locataire"
-                                      )
+                                  chambre?.nom || "Inconnue"
                                 ),
 
                                 React.createElement(
@@ -2932,30 +2364,17 @@
 
       const App = () => {
         const [currentPage, setCurrentPage] = React.useState("dashboard");
-        const [selectedBienForChambres, setSelectedBienForChambres] =
-          React.useState(null);
 
         const renderCurrentPage = () => {
           switch (currentPage) {
             case "dashboard":
               return React.createElement(DashboardPage);
             case "biens":
-              return React.createElement(BiensPage, {
-                onGererChambres: (bienId) => {
-                  setSelectedBienForChambres(bienId);
-                  setCurrentPage("chambres");
-                },
-              });
+              return React.createElement(BiensPage);
             case "locataires":
               return React.createElement(LocatairesPage);
             case "chambres":
-              return React.createElement(ChambresPage, {
-                selectedBienId: selectedBienForChambres,
-                onRetourBiens: () => {
-                  setSelectedBienForChambres(null);
-                  setCurrentPage("biens");
-                },
-              });
+              return React.createElement(ChambresPage);
             case "loyers":
               return React.createElement(LoyersPage);
             default:
