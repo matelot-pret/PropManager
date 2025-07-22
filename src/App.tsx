@@ -1,11 +1,11 @@
 // ...existing code...
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Dashboard from "./pages/Dashboard.jsx";
-import Biens from "./pages/Biens.jsx";
-import Locataires from "./pages/Locataires.jsx";
-import BienDetails from "./pages/BienDetails.jsx";
-import ChambreDetails from "./pages/ChambreDetails.jsx";
-import NotFound from "./pages/NotFound.jsx";
+import Dashboard from "./pages/Dashboard";
+import Biens from "./pages/Biens";
+import Locataires from "./pages/Locataires";
+import BienDetails from "./pages/BienDetails";
+import ChambreDetails from "./pages/ChambreDetails";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
