@@ -15,6 +15,7 @@ _Interface moderne pour la gestion de votre patrimoine immobilier_
 **État actuel :** Architecture TypeScript moderne avec services, hooks et utilitaires complets.
 
 ### ✨ Nouvelles fonctionnalités
+
 - **Services typés** : ChambreService, LocataireService avec validation et gestion d'erreurs
 - **Hooks React** : useChambres, useLocataires, useDashboard avec état réactif
 - **Types stricts** : +200 lignes de définitions TypeScript pour toutes les entités

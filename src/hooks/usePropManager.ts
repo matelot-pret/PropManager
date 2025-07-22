@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { propManagerService } from '@/services';
+import { useState, useEffect, useCallback } from "react";
+import { propManagerService } from "@/services";
 
 // ===========================================
 // TYPES POUR LE DASHBOARD
@@ -56,16 +56,16 @@ export function useDashboard() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await propManagerService.getDashboard();
-      
+
       if (response.success && response.data) {
         setDashboard(response.data);
       } else {
-        setError(response.error || 'Erreur lors du chargement du dashboard');
+        setError(response.error || "Erreur lors du chargement du dashboard");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -101,17 +101,17 @@ export function useGlobalSearch() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await propManagerService.rechercheGlobale(terme);
-      
+
       if (response.success && response.data) {
         setResults(response.data);
       } else {
-        setError(response.error || 'Erreur lors de la recherche');
+        setError(response.error || "Erreur lors de la recherche");
         setResults(null);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
       setResults(null);
     } finally {
       setLoading(false);
@@ -148,16 +148,16 @@ export function useDataSync() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await propManagerService.synchroniserDonnees();
-      
+
       if (response.success && response.data) {
         setSyncStatus(response.data);
       } else {
-        setError(response.error || 'Erreur lors de la synchronisation');
+        setError(response.error || "Erreur lors de la synchronisation");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -188,15 +188,15 @@ export function useConnectivity() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const result = await propManagerService.verifierConnectivite();
       setConnectivity(result);
-      
+
       if (!result.success) {
         setError(result.message);
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       setConnectivity({
         success: false,
@@ -235,24 +235,30 @@ export function useActivityReport() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const generateReport = useCallback(async (dateDebut: string, dateFin: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await propManagerService.genererRapportActivite(dateDebut, dateFin);
-      
-      if (response.success && response.data) {
-        setReport(response.data);
-      } else {
-        setError(response.error || 'Erreur lors de la génération du rapport');
+  const generateReport = useCallback(
+    async (dateDebut: string, dateFin: string) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await propManagerService.genererRapportActivite(
+          dateDebut,
+          dateFin
+        );
+
+        if (response.success && response.data) {
+          setReport(response.data);
+        } else {
+          setError(response.error || "Erreur lors de la génération du rapport");
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Erreur inconnue");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   return {
     report,
@@ -277,13 +283,12 @@ export function usePropManager() {
     propManagerService.clearCache();
   }, []);
 
-  const configure = useCallback((options: {
-    baseUrl?: string;
-    timeout?: number;
-    retries?: number;
-  }) => {
-    propManagerService.configure(options);
-  }, []);
+  const configure = useCallback(
+    (options: { baseUrl?: string; timeout?: number; retries?: number }) => {
+      propManagerService.configure(options);
+    },
+    []
+  );
 
   return {
     // Modules individuels
@@ -292,14 +297,25 @@ export function usePropManager() {
     dataSync,
     connectivity,
     activityReport,
-    
+
     // Actions globales
     clearCache,
     configure,
-    
+
     // État global
-    isLoading: dashboard.loading || globalSearch.loading || dataSync.loading || connectivity.loading || activityReport.loading,
-    hasErrors: !!(dashboard.error || globalSearch.error || dataSync.error || connectivity.error || activityReport.error),
+    isLoading:
+      dashboard.loading ||
+      globalSearch.loading ||
+      dataSync.loading ||
+      connectivity.loading ||
+      activityReport.loading,
+    hasErrors: !!(
+      dashboard.error ||
+      globalSearch.error ||
+      dataSync.error ||
+      connectivity.error ||
+      activityReport.error
+    ),
     errors: [
       dashboard.error,
       globalSearch.error,

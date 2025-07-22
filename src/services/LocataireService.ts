@@ -1,4 +1,11 @@
-import { Locataire, CreateLocataireDto, UpdateLocataireDto, LocataireFilters, ApiResponse, PaginatedResponse } from '@/types/models';
+import {
+  Locataire,
+  CreateLocataireDto,
+  UpdateLocataireDto,
+  LocataireFilters,
+  ApiResponse,
+  PaginatedResponse,
+} from "@/types/models";
 
 // ===========================================
 // INTERFACE DU SERVICE LOCATAIRE
@@ -11,26 +18,38 @@ export interface LocataireServiceInterface {
   create(data: CreateLocataireDto): Promise<ApiResponse<Locataire>>;
   update(id: string, data: UpdateLocataireDto): Promise<ApiResponse<Locataire>>;
   delete(id: string): Promise<ApiResponse<void>>;
-  
+
   // Business Operations
-  updateStatut(id: string, statut: Locataire['statut']): Promise<ApiResponse<Locataire>>;
+  updateStatut(
+    id: string,
+    statut: Locataire["statut"]
+  ): Promise<ApiResponse<Locataire>>;
   getActifs(): Promise<ApiResponse<Locataire[]>>;
   getInactifs(): Promise<ApiResponse<Locataire[]>>;
   rechercher(terme: string): Promise<ApiResponse<Locataire[]>>;
-  
+
   // Documents et Contacts
-  uploadDocument(id: string, document: File, type: string): Promise<ApiResponse<void>>;
+  uploadDocument(
+    id: string,
+    document: File,
+    type: string
+  ): Promise<ApiResponse<void>>;
   getDocuments(id: string): Promise<ApiResponse<any[]>>;
-  updateContact(id: string, contact: Partial<Pick<Locataire, 'telephone' | 'email'>>): Promise<ApiResponse<Locataire>>;
-  
+  updateContact(
+    id: string,
+    contact: Partial<Pick<Locataire, "telephone" | "email">>
+  ): Promise<ApiResponse<Locataire>>;
+
   // Analytics
-  getStatistiques(): Promise<ApiResponse<{
-    total: number;
-    actifs: number;
-    inactifs: number;
-    nouveaux_ce_mois: number;
-    age_moyen: number;
-  }>>;
+  getStatistiques(): Promise<
+    ApiResponse<{
+      total: number;
+      actifs: number;
+      inactifs: number;
+      nouveaux_ce_mois: number;
+      age_moyen: number;
+    }>
+  >;
 }
 
 // ===========================================
@@ -38,17 +57,17 @@ export interface LocataireServiceInterface {
 // ===========================================
 
 class LocataireService implements LocataireServiceInterface {
-  private baseUrl = '/api/locataires';
+  private baseUrl = "/api/locataires";
 
   // Utilitaire pour les requêtes HTTP
   private async request<T>(
-    endpoint: string, 
+    endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const config: RequestInit = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
       ...options,
@@ -56,10 +75,12 @@ class LocataireService implements LocataireServiceInterface {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(
+          errorData.message || `HTTP ${response.status}: ${response.statusText}`
+        );
       }
 
       return await response.json();
@@ -73,9 +94,11 @@ class LocataireService implements LocataireServiceInterface {
   // MÉTHODES CRUD
   // ===========================================
 
-  async getAll(filters?: LocataireFilters): Promise<PaginatedResponse<Locataire>> {
+  async getAll(
+    filters?: LocataireFilters
+  ): Promise<PaginatedResponse<Locataire>> {
     const params = new URLSearchParams();
-    
+
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -83,10 +106,10 @@ class LocataireService implements LocataireServiceInterface {
         }
       });
     }
-    
+
     const queryString = params.toString();
-    const endpoint = queryString ? `?${queryString}` : '';
-    
+    const endpoint = queryString ? `?${queryString}` : "";
+
     return this.request<PaginatedResponse<Locataire>>(endpoint);
   }
 
@@ -95,22 +118,25 @@ class LocataireService implements LocataireServiceInterface {
   }
 
   async create(data: CreateLocataireDto): Promise<ApiResponse<Locataire>> {
-    return this.request<ApiResponse<Locataire>>('', {
-      method: 'POST',
+    return this.request<ApiResponse<Locataire>>("", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  async update(id: string, data: UpdateLocataireDto): Promise<ApiResponse<Locataire>> {
+  async update(
+    id: string,
+    data: UpdateLocataireDto
+  ): Promise<ApiResponse<Locataire>> {
     return this.request<ApiResponse<Locataire>>(`/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async delete(id: string): Promise<ApiResponse<void>> {
     return this.request<ApiResponse<void>>(`/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   }
 
@@ -118,43 +144,54 @@ class LocataireService implements LocataireServiceInterface {
   // MÉTHODES MÉTIER
   // ===========================================
 
-  async updateStatut(id: string, statut: Locataire['statut']): Promise<ApiResponse<Locataire>> {
+  async updateStatut(
+    id: string,
+    statut: Locataire["statut"]
+  ): Promise<ApiResponse<Locataire>> {
     return this.request<ApiResponse<Locataire>>(`/${id}/statut`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify({ statut }),
     });
   }
 
   async getActifs(): Promise<ApiResponse<Locataire[]>> {
-    return this.request<ApiResponse<Locataire[]>>('/actifs');
+    return this.request<ApiResponse<Locataire[]>>("/actifs");
   }
 
   async getInactifs(): Promise<ApiResponse<Locataire[]>> {
-    return this.request<ApiResponse<Locataire[]>>('/inactifs');
+    return this.request<ApiResponse<Locataire[]>>("/inactifs");
   }
 
   async rechercher(terme: string): Promise<ApiResponse<Locataire[]>> {
     const params = new URLSearchParams({ q: terme });
-    return this.request<ApiResponse<Locataire[]>>(`/rechercher?${params.toString()}`);
+    return this.request<ApiResponse<Locataire[]>>(
+      `/rechercher?${params.toString()}`
+    );
   }
 
   // ===========================================
   // DOCUMENTS ET CONTACTS
   // ===========================================
 
-  async uploadDocument(id: string, document: File, type: string): Promise<ApiResponse<void>> {
+  async uploadDocument(
+    id: string,
+    document: File,
+    type: string
+  ): Promise<ApiResponse<void>> {
     const formData = new FormData();
-    formData.append('document', document);
-    formData.append('type', type);
+    formData.append("document", document);
+    formData.append("type", type);
 
     const response = await fetch(`${this.baseUrl}/${id}/documents`, {
-      method: 'POST',
+      method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `HTTP ${response.status}: ${response.statusText}`
+      );
     }
 
     return response.json();
@@ -165,11 +202,11 @@ class LocataireService implements LocataireServiceInterface {
   }
 
   async updateContact(
-    id: string, 
-    contact: Partial<Pick<Locataire, 'telephone' | 'email'>>
+    id: string,
+    contact: Partial<Pick<Locataire, "telephone" | "email">>
   ): Promise<ApiResponse<Locataire>> {
     return this.request<ApiResponse<Locataire>>(`/${id}/contact`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(contact),
     });
   }
@@ -178,20 +215,24 @@ class LocataireService implements LocataireServiceInterface {
   // ANALYTICS
   // ===========================================
 
-  async getStatistiques(): Promise<ApiResponse<{
-    total: number;
-    actifs: number;
-    inactifs: number;
-    nouveaux_ce_mois: number;
-    age_moyen: number;
-  }>> {
-    return this.request<ApiResponse<{
+  async getStatistiques(): Promise<
+    ApiResponse<{
       total: number;
       actifs: number;
       inactifs: number;
       nouveaux_ce_mois: number;
       age_moyen: number;
-    }>>('/statistiques');
+    }>
+  > {
+    return this.request<
+      ApiResponse<{
+        total: number;
+        actifs: number;
+        inactifs: number;
+        nouveaux_ce_mois: number;
+        age_moyen: number;
+      }>
+    >("/statistiques");
   }
 
   // ===========================================
@@ -207,20 +248,24 @@ class LocataireService implements LocataireServiceInterface {
   } {
     const errors: string[] = [];
 
-    if ('nom' in data && (!data.nom || data.nom.trim().length === 0)) {
-      errors.push('Le nom est requis');
+    if ("nom" in data && (!data.nom || data.nom.trim().length === 0)) {
+      errors.push("Le nom est requis");
     }
 
-    if ('prenom' in data && (!data.prenom || data.prenom.trim().length === 0)) {
-      errors.push('Le prénom est requis');
+    if ("prenom" in data && (!data.prenom || data.prenom.trim().length === 0)) {
+      errors.push("Le prénom est requis");
     }
 
-    if ('email' in data && data.email && !this.isValidEmail(data.email)) {
-      errors.push('L\'email n\'est pas valide');
+    if ("email" in data && data.email && !this.isValidEmail(data.email)) {
+      errors.push("L'email n'est pas valide");
     }
 
-    if ('telephone' in data && data.telephone && !this.isValidPhone(data.telephone)) {
-      errors.push('Le téléphone n\'est pas valide');
+    if (
+      "telephone" in data &&
+      data.telephone &&
+      !this.isValidPhone(data.telephone)
+    ) {
+      errors.push("Le téléphone n'est pas valide");
     }
 
     // Validation de l'âge si fourni (propriété optionnelle)
@@ -246,7 +291,7 @@ class LocataireService implements LocataireServiceInterface {
    */
   private isValidPhone(phone: string): boolean {
     const phoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/;
-    return phoneRegex.test(phone.replace(/\s/g, ''));
+    return phoneRegex.test(phone.replace(/\s/g, ""));
   }
 
   /**
@@ -257,11 +302,14 @@ class LocataireService implements LocataireServiceInterface {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
-    
+
     return age;
   }
 
@@ -277,7 +325,7 @@ class LocataireService implements LocataireServiceInterface {
    */
   formatLocataireDisplay(locataire: Locataire): string {
     const nomComplet = this.formatNomComplet(locataire);
-    const statutDisplay = locataire.statut === 'actif' ? '✓' : '✗';
+    const statutDisplay = locataire.statut === "actif" ? "✓" : "✗";
     return `${nomComplet} ${statutDisplay}`;
   }
 
@@ -290,10 +338,9 @@ class LocataireService implements LocataireServiceInterface {
   } {
     return {
       nom_complet: this.formatNomComplet(locataire),
-      contacts: [
-        locataire.email,
-        locataire.telephone,
-      ].filter(Boolean) as string[],
+      contacts: [locataire.email, locataire.telephone].filter(
+        Boolean
+      ) as string[],
     };
   }
 }

@@ -15,7 +15,7 @@ export function isValidEmail(email: string): boolean {
  */
 export function isValidPhoneFR(phone: string): boolean {
   const phoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/;
-  return phoneRegex.test(phone.replace(/\s/g, ''));
+  return phoneRegex.test(phone.replace(/\s/g, ""));
 }
 
 /**
@@ -45,7 +45,7 @@ export function isValidAge(age: number): boolean {
 export function isValidBirthDate(dateString: string): boolean {
   const birthDate = new Date(dateString);
   const today = new Date();
-  return birthDate < today && birthDate > new Date('1900-01-01');
+  return birthDate < today && birthDate > new Date("1900-01-01");
 }
 
 // ===========================================
@@ -55,9 +55,9 @@ export function isValidBirthDate(dateString: string): boolean {
 /**
  * Formate un montant en euros
  */
-export function formatCurrency(amount: number, currency = 'EUR'): string {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
+export function formatCurrency(amount: number, currency = "EUR"): string {
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
     currency,
   }).format(amount);
 }
@@ -66,7 +66,7 @@ export function formatCurrency(amount: number, currency = 'EUR'): string {
  * Formate un nombre avec séparateurs de milliers
  */
 export function formatNumber(number: number): string {
-  return new Intl.NumberFormat('fr-FR').format(number);
+  return new Intl.NumberFormat("fr-FR").format(number);
 }
 
 /**
@@ -74,7 +74,7 @@ export function formatNumber(number: number): string {
  */
 export function formatDateFR(dateString: string): string {
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat('fr-FR').format(date);
+  return new Intl.DateTimeFormat("fr-FR").format(date);
 }
 
 /**
@@ -82,21 +82,24 @@ export function formatDateFR(dateString: string): string {
  */
 export function formatDateForInput(dateString: string): string {
   const date = new Date(dateString);
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 }
 
 /**
  * Formate un numéro de téléphone français
  */
 export function formatPhoneFR(phone: string): string {
-  const cleaned = phone.replace(/\s+/g, '');
+  const cleaned = phone.replace(/\s+/g, "");
   const match = cleaned.match(/^(?:\+33|0033|0)([1-9](?:\d{8}))$/);
-  
+
   if (match) {
     const number = match[1];
-    return `0${number.slice(0, 1)} ${number.slice(1, 3)} ${number.slice(3, 5)} ${number.slice(5, 7)} ${number.slice(7, 9)}`;
+    return `0${number.slice(0, 1)} ${number.slice(1, 3)} ${number.slice(
+      3,
+      5
+    )} ${number.slice(5, 7)} ${number.slice(7, 9)}`;
   }
-  
+
   return phone; // Retourne le numéro original si le format n'est pas reconnu
 }
 
@@ -126,18 +129,24 @@ export function calculateAge(birthDateString: string): number {
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDiff = today.getMonth() - birthDate.getMonth();
-  
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && today.getDate() < birthDate.getDate())
+  ) {
     age--;
   }
-  
+
   return age;
 }
 
 /**
  * Calcule le rendement locatif annuel
  */
-export function calculateRendement(revenuAnnuel: number, prixAchat: number): number {
+export function calculateRendement(
+  revenuAnnuel: number,
+  prixAchat: number
+): number {
   if (prixAchat === 0) return 0;
   return (revenuAnnuel / prixAchat) * 100;
 }
@@ -145,7 +154,10 @@ export function calculateRendement(revenuAnnuel: number, prixAchat: number): num
 /**
  * Calcule le taux d'occupation
  */
-export function calculateTauxOccupation(chambresLouees: number, totalChambres: number): number {
+export function calculateTauxOccupation(
+  chambresLouees: number,
+  totalChambres: number
+): number {
   if (totalChambres === 0) return 0;
   return (chambresLouees / totalChambres) * 100;
 }
@@ -153,7 +165,10 @@ export function calculateTauxOccupation(chambresLouees: number, totalChambres: n
 /**
  * Calcule le loyer total (loyer + charges)
  */
-export function calculateLoyerTotal(loyer: number, charges: number = 0): number {
+export function calculateLoyerTotal(
+  loyer: number,
+  charges: number = 0
+): number {
   return loyer + charges;
 }
 
@@ -165,14 +180,14 @@ export function calculateLoyerTotal(loyer: number, charges: number = 0): number 
  * Nettoie et normalise une chaîne de caractères
  */
 export function cleanString(str: string): string {
-  return str.trim().replace(/\s+/g, ' ');
+  return str.trim().replace(/\s+/g, " ");
 }
 
 /**
  * Capitalise la première lettre de chaque mot
  */
 export function capitalize(str: string): string {
-  return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+  return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 /**
@@ -209,11 +224,11 @@ export function truncateText(text: string, maxLength: number): string {
 export function stringToSlug(str: string): string {
   return str
     .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // Retire les accents
-    .replace(/[^a-z0-9 -]/g, '') // Garde seulement les lettres, chiffres, espaces et tirets
-    .replace(/\s+/g, '-') // Remplace les espaces par des tirets
-    .replace(/-+/g, '-') // Élimine les tirets multiples
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Retire les accents
+    .replace(/[^a-z0-9 -]/g, "") // Garde seulement les lettres, chiffres, espaces et tirets
+    .replace(/\s+/g, "-") // Remplace les espaces par des tirets
+    .replace(/-+/g, "-") // Élimine les tirets multiples
     .trim();
 }
 
@@ -222,27 +237,29 @@ export function stringToSlug(str: string): string {
  */
 export function objectToQueryString(obj: Record<string, any>): string {
   const params = new URLSearchParams();
-  
+
   Object.entries(obj).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       params.append(key, String(value));
     }
   });
-  
+
   return params.toString();
 }
 
 /**
  * Parse une chaîne de paramètres d'URL en objet
  */
-export function queryStringToObject(queryString: string): Record<string, string> {
+export function queryStringToObject(
+  queryString: string
+): Record<string, string> {
   const params = new URLSearchParams(queryString);
   const result: Record<string, string> = {};
-  
+
   params.forEach((value, key) => {
     result[key] = value;
   });
-  
+
   return result;
 }
 
@@ -255,17 +272,17 @@ export function queryStringToObject(queryString: string): Record<string, string>
  */
 export function searchText(text: string, query: string): boolean {
   if (!query.trim()) return true;
-  
+
   const normalizedText = text
     .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-    
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
   const normalizedQuery = query
     .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-    
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
   return normalizedText.includes(normalizedQuery);
 }
 
@@ -275,14 +292,14 @@ export function searchText(text: string, query: string): boolean {
 export function sortByProperty<T>(
   array: T[],
   property: keyof T,
-  direction: 'asc' | 'desc' = 'asc'
+  direction: "asc" | "desc" = "asc"
 ): T[] {
   return [...array].sort((a, b) => {
     const aValue = a[property];
     const bValue = b[property];
-    
-    if (aValue < bValue) return direction === 'asc' ? -1 : 1;
-    if (aValue > bValue) return direction === 'asc' ? 1 : -1;
+
+    if (aValue < bValue) return direction === "asc" ? -1 : 1;
+    if (aValue > bValue) return direction === "asc" ? 1 : -1;
     return 0;
   });
 }
@@ -296,11 +313,11 @@ export function filterBySearch<T extends Record<string, any>>(
   searchFields: (keyof T)[]
 ): T[] {
   if (!query.trim()) return array;
-  
-  return array.filter(item =>
-    searchFields.some(field => {
+
+  return array.filter((item) =>
+    searchFields.some((field) => {
       const value = item[field];
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         return searchText(value, query);
       }
       return false;
@@ -320,7 +337,7 @@ export function debounce<T extends (...args: any[]) => any>(
   wait: number
 ): (...args: Parameters<T>) => void {
   let timeout: number;
-  
+
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = window.setTimeout(() => func(...args), wait);
@@ -335,12 +352,12 @@ export function throttle<T extends (...args: any[]) => any>(
   limit: number
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
-  
+
   return (...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 }
@@ -349,12 +366,12 @@ export function throttle<T extends (...args: any[]) => any>(
  * Copie profonde d'un objet
  */
 export function deepClone<T>(obj: T): T {
-  if (obj === null || typeof obj !== 'object') return obj;
+  if (obj === null || typeof obj !== "object") return obj;
   if (obj instanceof Date) return new Date(obj) as unknown as T;
   if (obj instanceof Array) return obj.map(deepClone) as unknown as T;
-  if (typeof obj === 'object') {
+  if (typeof obj === "object") {
     const cloned: Record<string, any> = {};
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       cloned[key] = deepClone((obj as Record<string, any>)[key]);
     });
     return cloned as T;

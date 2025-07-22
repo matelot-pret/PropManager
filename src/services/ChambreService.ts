@@ -1,4 +1,11 @@
-import { Chambre, CreateChambreDto, UpdateChambreDto, ChambreFilters, ApiResponse, PaginatedResponse } from '@/types/models';
+import {
+  Chambre,
+  CreateChambreDto,
+  UpdateChambreDto,
+  ChambreFilters,
+  ApiResponse,
+  PaginatedResponse,
+} from "@/types/models";
 
 // ===========================================
 // INTERFACE DU SERVICE CHAMBRE
@@ -12,22 +19,31 @@ export interface ChambreServiceInterface {
   create(data: CreateChambreDto): Promise<ApiResponse<Chambre>>;
   update(id: string, data: UpdateChambreDto): Promise<ApiResponse<Chambre>>;
   delete(id: string): Promise<ApiResponse<void>>;
-  
+
   // Business Operations
-  updateStatut(id: string, statut: Chambre['statut']): Promise<ApiResponse<Chambre>>;
-  updateLoyer(id: string, loyer: number, charges?: number): Promise<ApiResponse<Chambre>>;
+  updateStatut(
+    id: string,
+    statut: Chambre["statut"]
+  ): Promise<ApiResponse<Chambre>>;
+  updateLoyer(
+    id: string,
+    loyer: number,
+    charges?: number
+  ): Promise<ApiResponse<Chambre>>;
   getChambresLibres(bienId?: string): Promise<ApiResponse<Chambre[]>>;
   getChambresLouees(bienId?: string): Promise<ApiResponse<Chambre[]>>;
-  
+
   // Analytics
-  getStatistiques(): Promise<ApiResponse<{
-    total: number;
-    libres: number;
-    louees: number;
-    travaux: number;
-    revenus_mensuels: number;
-    taux_occupation: number;
-  }>>;
+  getStatistiques(): Promise<
+    ApiResponse<{
+      total: number;
+      libres: number;
+      louees: number;
+      travaux: number;
+      revenus_mensuels: number;
+      taux_occupation: number;
+    }>
+  >;
 }
 
 // ===========================================
@@ -35,17 +51,17 @@ export interface ChambreServiceInterface {
 // ===========================================
 
 class ChambreService implements ChambreServiceInterface {
-  private baseUrl = '/api/chambres';
+  private baseUrl = "/api/chambres";
 
   // Utilitaire pour les requêtes HTTP
   private async request<T>(
-    endpoint: string, 
+    endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const config: RequestInit = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
       ...options,
@@ -53,10 +69,12 @@ class ChambreService implements ChambreServiceInterface {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(
+          errorData.message || `HTTP ${response.status}: ${response.statusText}`
+        );
       }
 
       return await response.json();
@@ -72,7 +90,7 @@ class ChambreService implements ChambreServiceInterface {
 
   async getAll(filters?: ChambreFilters): Promise<PaginatedResponse<Chambre>> {
     const params = new URLSearchParams();
-    
+
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -80,10 +98,10 @@ class ChambreService implements ChambreServiceInterface {
         }
       });
     }
-    
+
     const queryString = params.toString();
-    const endpoint = queryString ? `?${queryString}` : '';
-    
+    const endpoint = queryString ? `?${queryString}` : "";
+
     return this.request<PaginatedResponse<Chambre>>(endpoint);
   }
 
@@ -96,22 +114,25 @@ class ChambreService implements ChambreServiceInterface {
   }
 
   async create(data: CreateChambreDto): Promise<ApiResponse<Chambre>> {
-    return this.request<ApiResponse<Chambre>>('', {
-      method: 'POST',
+    return this.request<ApiResponse<Chambre>>("", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  async update(id: string, data: UpdateChambreDto): Promise<ApiResponse<Chambre>> {
+  async update(
+    id: string,
+    data: UpdateChambreDto
+  ): Promise<ApiResponse<Chambre>> {
     return this.request<ApiResponse<Chambre>>(`/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async delete(id: string): Promise<ApiResponse<void>> {
     return this.request<ApiResponse<void>>(`/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   }
 
@@ -119,59 +140,70 @@ class ChambreService implements ChambreServiceInterface {
   // MÉTHODES MÉTIER
   // ===========================================
 
-  async updateStatut(id: string, statut: Chambre['statut']): Promise<ApiResponse<Chambre>> {
+  async updateStatut(
+    id: string,
+    statut: Chambre["statut"]
+  ): Promise<ApiResponse<Chambre>> {
     return this.request<ApiResponse<Chambre>>(`/${id}/statut`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify({ statut }),
     });
   }
 
-  async updateLoyer(id: string, loyer: number, charges?: number): Promise<ApiResponse<Chambre>> {
+  async updateLoyer(
+    id: string,
+    loyer: number,
+    charges?: number
+  ): Promise<ApiResponse<Chambre>> {
     const data: Partial<Chambre> = { loyer_mensuel: loyer };
     if (charges !== undefined) {
       data.charges_mensuelles = charges;
     }
 
     return this.request<ApiResponse<Chambre>>(`/${id}/loyer`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(data),
     });
   }
 
   async getChambresLibres(bienId?: string): Promise<ApiResponse<Chambre[]>> {
-    const params = new URLSearchParams({ statut: 'libre' });
+    const params = new URLSearchParams({ statut: "libre" });
     if (bienId) {
-      params.append('bien_id', bienId);
+      params.append("bien_id", bienId);
     }
-    
+
     return this.request<ApiResponse<Chambre[]>>(`/libres?${params.toString()}`);
   }
 
   async getChambresLouees(bienId?: string): Promise<ApiResponse<Chambre[]>> {
-    const params = new URLSearchParams({ statut: 'louee' });
+    const params = new URLSearchParams({ statut: "louee" });
     if (bienId) {
-      params.append('bien_id', bienId);
+      params.append("bien_id", bienId);
     }
-    
+
     return this.request<ApiResponse<Chambre[]>>(`/louees?${params.toString()}`);
   }
 
-  async getStatistiques(): Promise<ApiResponse<{
-    total: number;
-    libres: number;
-    louees: number;
-    travaux: number;
-    revenus_mensuels: number;
-    taux_occupation: number;
-  }>> {
-    return this.request<ApiResponse<{
+  async getStatistiques(): Promise<
+    ApiResponse<{
       total: number;
       libres: number;
       louees: number;
       travaux: number;
       revenus_mensuels: number;
       taux_occupation: number;
-    }>>('/statistiques');
+    }>
+  > {
+    return this.request<
+      ApiResponse<{
+        total: number;
+        libres: number;
+        louees: number;
+        travaux: number;
+        revenus_mensuels: number;
+        taux_occupation: number;
+      }>
+    >("/statistiques");
   }
 
   // ===========================================
@@ -187,20 +219,30 @@ class ChambreService implements ChambreServiceInterface {
   } {
     const errors: string[] = [];
 
-    if ('nom' in data && (!data.nom || data.nom.trim().length === 0)) {
-      errors.push('Le nom de la chambre est requis');
+    if ("nom" in data && (!data.nom || data.nom.trim().length === 0)) {
+      errors.push("Le nom de la chambre est requis");
     }
 
-    if ('surface' in data && (data.surface === undefined || data.surface <= 0)) {
-      errors.push('La surface doit être supérieure à 0');
+    if (
+      "surface" in data &&
+      (data.surface === undefined || data.surface <= 0)
+    ) {
+      errors.push("La surface doit être supérieure à 0");
     }
 
-    if ('loyer_mensuel' in data && (data.loyer_mensuel === undefined || data.loyer_mensuel < 0)) {
-      errors.push('Le loyer mensuel ne peut pas être négatif');
+    if (
+      "loyer_mensuel" in data &&
+      (data.loyer_mensuel === undefined || data.loyer_mensuel < 0)
+    ) {
+      errors.push("Le loyer mensuel ne peut pas être négatif");
     }
 
-    if ('charges_mensuelles' in data && data.charges_mensuelles !== undefined && data.charges_mensuelles < 0) {
-      errors.push('Les charges mensuelles ne peuvent pas être négatives');
+    if (
+      "charges_mensuelles" in data &&
+      data.charges_mensuelles !== undefined &&
+      data.charges_mensuelles < 0
+    ) {
+      errors.push("Les charges mensuelles ne peuvent pas être négatives");
     }
 
     return {

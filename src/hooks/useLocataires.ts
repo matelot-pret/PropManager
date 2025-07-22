@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Locataire, LocataireFilters, PaginatedResponse } from '@/types/models';
-import { locataireService } from '@/services';
+import { useState, useEffect, useCallback } from "react";
+import { Locataire, LocataireFilters, PaginatedResponse } from "@/types/models";
+import { locataireService } from "@/services";
 
 // ===========================================
 // HOOK PRINCIPAL POUR LES LOCATAIRES
@@ -22,14 +22,14 @@ export function useLocataires(filters?: LocataireFilters) {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await locataireService.getAll(filters);
-      
+
       if (response.success && response.data) {
         setLocataires(response.data);
-        
+
         // Si c'est une réponse paginée
-        if ('meta' in response) {
+        if ("meta" in response) {
           const paginatedResponse = response as PaginatedResponse<Locataire>;
           setPagination({
             page: paginatedResponse.meta.page,
@@ -40,10 +40,10 @@ export function useLocataires(filters?: LocataireFilters) {
           });
         }
       } else {
-        setError(response.error || 'Erreur lors du chargement des locataires');
+        setError(response.error || "Erreur lors du chargement des locataires");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -80,16 +80,16 @@ export function useLocataire(id: string | null) {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await locataireService.getById(id);
-      
+
       if (response.success && response.data) {
         setLocataire(response.data);
       } else {
-        setError(response.error || 'Erreur lors du chargement du locataire');
+        setError(response.error || "Erreur lors du chargement du locataire");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -126,16 +126,18 @@ export function useLocatairesStats() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await locataireService.getStatistiques();
-      
+
       if (response.success && response.data) {
         setStats(response.data);
       } else {
-        setError(response.error || 'Erreur lors du chargement des statistiques');
+        setError(
+          response.error || "Erreur lors du chargement des statistiques"
+        );
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -165,23 +167,23 @@ export function useLocatairesActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const validation = locataireService.validateLocataireData(data);
       if (!validation.valid) {
-        setError(validation.errors.join(', '));
-        throw new Error(validation.errors.join(', '));
+        setError(validation.errors.join(", "));
+        throw new Error(validation.errors.join(", "));
       }
-      
+
       const response = await locataireService.create(data);
-      
+
       if (response.success) {
         return response.data;
       } else {
-        setError(response.error || 'Erreur lors de la création');
-        throw new Error(response.error || 'Erreur lors de la création');
+        setError(response.error || "Erreur lors de la création");
+        throw new Error(response.error || "Erreur lors de la création");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -193,23 +195,23 @@ export function useLocatairesActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const validation = locataireService.validateLocataireData(data);
       if (!validation.valid) {
-        setError(validation.errors.join(', '));
-        throw new Error(validation.errors.join(', '));
+        setError(validation.errors.join(", "));
+        throw new Error(validation.errors.join(", "));
       }
-      
+
       const response = await locataireService.update(id, data);
-      
+
       if (response.success) {
         return response.data;
       } else {
-        setError(response.error || 'Erreur lors de la mise à jour');
-        throw new Error(response.error || 'Erreur lors de la mise à jour');
+        setError(response.error || "Erreur lors de la mise à jour");
+        throw new Error(response.error || "Erreur lors de la mise à jour");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -221,15 +223,15 @@ export function useLocatairesActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await locataireService.delete(id);
-      
+
       if (!response.success) {
-        setError(response.error || 'Erreur lors de la suppression');
-        throw new Error(response.error || 'Erreur lors de la suppression');
+        setError(response.error || "Erreur lors de la suppression");
+        throw new Error(response.error || "Erreur lors de la suppression");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -237,52 +239,64 @@ export function useLocatairesActions() {
     }
   }, []);
 
-  const updateStatut = useCallback(async (id: string, statut: Locataire['statut']) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await locataireService.updateStatut(id, statut);
-      
-      if (response.success) {
-        return response.data;
-      } else {
-        setError(response.error || 'Erreur lors de la mise à jour du statut');
-        throw new Error(response.error || 'Erreur lors de la mise à jour du statut');
-      }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
-      setError(message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const updateStatut = useCallback(
+    async (id: string, statut: Locataire["statut"]) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const updateContact = useCallback(async (
-    id: string, 
-    contact: Partial<Pick<Locataire, 'telephone' | 'email'>>
-  ) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await locataireService.updateContact(id, contact);
-      
-      if (response.success) {
-        return response.data;
-      } else {
-        setError(response.error || 'Erreur lors de la mise à jour du contact');
-        throw new Error(response.error || 'Erreur lors de la mise à jour du contact');
+        const response = await locataireService.updateStatut(id, statut);
+
+        if (response.success) {
+          return response.data;
+        } else {
+          setError(response.error || "Erreur lors de la mise à jour du statut");
+          throw new Error(
+            response.error || "Erreur lors de la mise à jour du statut"
+          );
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Erreur inconnue";
+        setError(message);
+        throw err;
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
-      setError(message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
+
+  const updateContact = useCallback(
+    async (
+      id: string,
+      contact: Partial<Pick<Locataire, "telephone" | "email">>
+    ) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await locataireService.updateContact(id, contact);
+
+        if (response.success) {
+          return response.data;
+        } else {
+          setError(
+            response.error || "Erreur lors de la mise à jour du contact"
+          );
+          throw new Error(
+            response.error || "Erreur lors de la mise à jour du contact"
+          );
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Erreur inconnue";
+        setError(message);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   return {
     loading,
@@ -309,25 +323,25 @@ export function useLocatairesParStatut() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const [actifsResponse, inactifsResponse] = await Promise.all([
         locataireService.getActifs(),
         locataireService.getInactifs(),
       ]);
-      
+
       if (actifsResponse.success && actifsResponse.data) {
         setLocatairesActifs(actifsResponse.data);
       }
-      
+
       if (inactifsResponse.success && inactifsResponse.data) {
         setLocatairesInactifs(inactifsResponse.data);
       }
-      
+
       if (!actifsResponse.success || !inactifsResponse.success) {
-        setError('Erreur lors du chargement des locataires par statut');
+        setError("Erreur lors du chargement des locataires par statut");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -364,17 +378,17 @@ export function useLocatairesSearch() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await locataireService.rechercher(terme);
-      
+
       if (response.success && response.data) {
         setResults(response.data);
       } else {
-        setError(response.error || 'Erreur lors de la recherche');
+        setError(response.error || "Erreur lors de la recherche");
         setResults([]);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
       setResults([]);
     } finally {
       setLoading(false);

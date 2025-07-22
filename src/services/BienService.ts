@@ -1,4 +1,11 @@
-import { Bien, CreateBienDto, UpdateBienDto, BienFilters, ApiResponse, PaginatedResponse } from '@/types/models';
+import {
+  Bien,
+  CreateBienDto,
+  UpdateBienDto,
+  BienFilters,
+  ApiResponse,
+  PaginatedResponse,
+} from "@/types/models";
 
 // ===========================================
 // INTERFACE DU SERVICE BIEN
@@ -11,26 +18,32 @@ export interface BienServiceInterface {
   create(data: CreateBienDto): Promise<ApiResponse<Bien>>;
   update(id: string, data: UpdateBienDto): Promise<ApiResponse<Bien>>;
   delete(id: string): Promise<ApiResponse<void>>;
-  
+
   // Business Operations
   getWithChambres(id: string): Promise<ApiResponse<Bien & { chambres: any[] }>>;
-  updateStatut(id: string, statut: Bien['statut']): Promise<ApiResponse<Bien>>;
+  updateStatut(id: string, statut: Bien["statut"]): Promise<ApiResponse<Bien>>;
   getRevenuMensuel(id: string): Promise<ApiResponse<{ revenu: number }>>;
   getTauxOccupation(id: string): Promise<ApiResponse<{ taux: number }>>;
-  
+
   // Analytics
-  getStatistiques(): Promise<ApiResponse<{
-    total: number;
-    actifs: number;
-    inactifs: number;
-    revenu_total: number;
-    taux_occupation_moyen: number;
-    nombre_chambres_total: number;
-  }>>;
-  
+  getStatistiques(): Promise<
+    ApiResponse<{
+      total: number;
+      actifs: number;
+      inactifs: number;
+      revenu_total: number;
+      taux_occupation_moyen: number;
+      nombre_chambres_total: number;
+    }>
+  >;
+
   // Utilitaires
   rechercher(terme: string): Promise<ApiResponse<Bien[]>>;
-  getByProximite(latitude: number, longitude: number, rayon: number): Promise<ApiResponse<Bien[]>>;
+  getByProximite(
+    latitude: number,
+    longitude: number,
+    rayon: number
+  ): Promise<ApiResponse<Bien[]>>;
 }
 
 // ===========================================
@@ -38,17 +51,17 @@ export interface BienServiceInterface {
 // ===========================================
 
 class BienService implements BienServiceInterface {
-  private baseUrl = '/api/biens';
+  private baseUrl = "/api/biens";
 
   // Utilitaire pour les requêtes HTTP
   private async request<T>(
-    endpoint: string, 
+    endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const config: RequestInit = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
       ...options,
@@ -56,10 +69,12 @@ class BienService implements BienServiceInterface {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(
+          errorData.message || `HTTP ${response.status}: ${response.statusText}`
+        );
       }
 
       return await response.json();
@@ -75,7 +90,7 @@ class BienService implements BienServiceInterface {
 
   async getAll(filters?: BienFilters): Promise<PaginatedResponse<Bien>> {
     const params = new URLSearchParams();
-    
+
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -83,10 +98,10 @@ class BienService implements BienServiceInterface {
         }
       });
     }
-    
+
     const queryString = params.toString();
-    const endpoint = queryString ? `?${queryString}` : '';
-    
+    const endpoint = queryString ? `?${queryString}` : "";
+
     return this.request<PaginatedResponse<Bien>>(endpoint);
   }
 
@@ -95,22 +110,22 @@ class BienService implements BienServiceInterface {
   }
 
   async create(data: CreateBienDto): Promise<ApiResponse<Bien>> {
-    return this.request<ApiResponse<Bien>>('', {
-      method: 'POST',
+    return this.request<ApiResponse<Bien>>("", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   async update(id: string, data: UpdateBienDto): Promise<ApiResponse<Bien>> {
     return this.request<ApiResponse<Bien>>(`/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async delete(id: string): Promise<ApiResponse<void>> {
     return this.request<ApiResponse<void>>(`/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   }
 
@@ -118,13 +133,20 @@ class BienService implements BienServiceInterface {
   // MÉTHODES MÉTIER
   // ===========================================
 
-  async getWithChambres(id: string): Promise<ApiResponse<Bien & { chambres: any[] }>> {
-    return this.request<ApiResponse<Bien & { chambres: any[] }>>(`/${id}/chambres`);
+  async getWithChambres(
+    id: string
+  ): Promise<ApiResponse<Bien & { chambres: any[] }>> {
+    return this.request<ApiResponse<Bien & { chambres: any[] }>>(
+      `/${id}/chambres`
+    );
   }
 
-  async updateStatut(id: string, statut: Bien['statut']): Promise<ApiResponse<Bien>> {
+  async updateStatut(
+    id: string,
+    statut: Bien["statut"]
+  ): Promise<ApiResponse<Bien>> {
     return this.request<ApiResponse<Bien>>(`/${id}/statut`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify({ statut }),
     });
   }
@@ -137,32 +159,38 @@ class BienService implements BienServiceInterface {
     return this.request<ApiResponse<{ taux: number }>>(`/${id}/occupation`);
   }
 
-  async getStatistiques(): Promise<ApiResponse<{
-    total: number;
-    actifs: number;
-    inactifs: number;
-    revenu_total: number;
-    taux_occupation_moyen: number;
-    nombre_chambres_total: number;
-  }>> {
-    return this.request<ApiResponse<{
+  async getStatistiques(): Promise<
+    ApiResponse<{
       total: number;
       actifs: number;
       inactifs: number;
       revenu_total: number;
       taux_occupation_moyen: number;
       nombre_chambres_total: number;
-    }>>('/statistiques');
+    }>
+  > {
+    return this.request<
+      ApiResponse<{
+        total: number;
+        actifs: number;
+        inactifs: number;
+        revenu_total: number;
+        taux_occupation_moyen: number;
+        nombre_chambres_total: number;
+      }>
+    >("/statistiques");
   }
 
   async rechercher(terme: string): Promise<ApiResponse<Bien[]>> {
     const params = new URLSearchParams({ q: terme });
-    return this.request<ApiResponse<Bien[]>>(`/rechercher?${params.toString()}`);
+    return this.request<ApiResponse<Bien[]>>(
+      `/rechercher?${params.toString()}`
+    );
   }
 
   async getByProximite(
-    latitude: number, 
-    longitude: number, 
+    latitude: number,
+    longitude: number,
     rayon: number
   ): Promise<ApiResponse<Bien[]>> {
     const params = new URLSearchParams({
@@ -186,28 +214,39 @@ class BienService implements BienServiceInterface {
   } {
     const errors: string[] = [];
 
-    if ('nom' in data && (!data.nom || data.nom.trim().length === 0)) {
-      errors.push('Le nom du bien est requis');
+    if ("nom" in data && (!data.nom || data.nom.trim().length === 0)) {
+      errors.push("Le nom du bien est requis");
     }
 
-    if ('adresse' in data && (!data.adresse || data.adresse.trim().length === 0)) {
-      errors.push('L\'adresse est requise');
+    if (
+      "adresse" in data &&
+      (!data.adresse || data.adresse.trim().length === 0)
+    ) {
+      errors.push("L'adresse est requise");
     }
 
-    if ('type' in data && data.type && !this.isValidBienType(data.type)) {
-      errors.push('Le type de bien n\'est pas valide');
+    if ("type" in data && data.type && !this.isValidBienType(data.type)) {
+      errors.push("Le type de bien n'est pas valide");
     }
 
-    if ('surface' in data && data.surface !== undefined && data.surface <= 0) {
-      errors.push('La surface doit être supérieure à 0');
+    if ("surface" in data && data.surface !== undefined && data.surface <= 0) {
+      errors.push("La surface doit être supérieure à 0");
     }
 
-    if ('nb_pieces' in data && data.nb_pieces !== undefined && data.nb_pieces < 0) {
-      errors.push('Le nombre de pièces ne peut pas être négatif');
+    if (
+      "nb_pieces" in data &&
+      data.nb_pieces !== undefined &&
+      data.nb_pieces < 0
+    ) {
+      errors.push("Le nombre de pièces ne peut pas être négatif");
     }
 
-    if ('loyer_mensuel' in data && data.loyer_mensuel !== undefined && data.loyer_mensuel < 0) {
-      errors.push('Le loyer mensuel ne peut pas être négatif');
+    if (
+      "loyer_mensuel" in data &&
+      data.loyer_mensuel !== undefined &&
+      data.loyer_mensuel < 0
+    ) {
+      errors.push("Le loyer mensuel ne peut pas être négatif");
     }
 
     return {
@@ -220,7 +259,7 @@ class BienService implements BienServiceInterface {
    * Valide le type de bien
    */
   private isValidBienType(type: string): boolean {
-    const validTypes = ['maison', 'appartement', 'studio', 'local_commercial'];
+    const validTypes = ["maison", "appartement", "studio", "local_commercial"];
     return validTypes.includes(type);
   }
 
@@ -231,7 +270,7 @@ class BienService implements BienServiceInterface {
     if (!bien.depot_garantie || bien.depot_garantie === 0) {
       return 0;
     }
-    
+
     const revenuAnnuel = bien.loyer_mensuel * 12;
     return (revenuAnnuel / bien.depot_garantie) * 100;
   }
@@ -240,8 +279,8 @@ class BienService implements BienServiceInterface {
    * Formate l'affichage d'un bien
    */
   formatBienDisplay(bien: Bien): string {
-    const pieces = bien.nb_pieces ? ` - ${bien.nb_pieces} pièces` : '';
-    const surface = bien.surface ? ` - ${bien.surface}m²` : '';
+    const pieces = bien.nb_pieces ? ` - ${bien.nb_pieces} pièces` : "";
+    const surface = bien.surface ? ` - ${bien.surface}m²` : "";
     return `${bien.nom}${pieces}${surface}`;
   }
 
@@ -283,23 +322,27 @@ class BienService implements BienServiceInterface {
     const recommandations: string[] = [];
 
     if (!bien.depot_garantie) {
-      recommandations.push('Renseigner le dépôt de garantie pour calculer le rendement');
+      recommandations.push(
+        "Renseigner le dépôt de garantie pour calculer le rendement"
+      );
     }
 
     if (!bien.surface) {
-      recommandations.push('Indiquer la surface pour une meilleure valorisation');
+      recommandations.push(
+        "Indiquer la surface pour une meilleure valorisation"
+      );
     }
 
     if (!bien.nb_pieces || bien.nb_pieces === 0) {
-      recommandations.push('Préciser le nombre de pièces');
+      recommandations.push("Préciser le nombre de pièces");
     }
 
-    if (bien.statut === 'travaux') {
-      recommandations.push('Finaliser les travaux pour remettre en location');
+    if (bien.statut === "travaux") {
+      recommandations.push("Finaliser les travaux pour remettre en location");
     }
 
     if (bien.loyer_mensuel === 0) {
-      recommandations.push('Définir le loyer mensuel');
+      recommandations.push("Définir le loyer mensuel");
     }
 
     return recommandations;

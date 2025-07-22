@@ -1,6 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Chambre, ChambreFilters, ApiResponse, PaginatedResponse } from '@/types/models';
-import { chambreService } from '@/services';
+import { useState, useEffect, useCallback } from "react";
+import {
+  Chambre,
+  ChambreFilters,
+  ApiResponse,
+  PaginatedResponse,
+} from "@/types/models";
+import { chambreService } from "@/services";
 
 // ===========================================
 // HOOK PRINCIPAL POUR LES CHAMBRES
@@ -22,14 +27,14 @@ export function useChambres(filters?: ChambreFilters) {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await chambreService.getAll(filters);
-      
+
       if (response.success && response.data) {
         setChambres(response.data);
-        
+
         // Si c'est une réponse paginée
-        if ('meta' in response) {
+        if ("meta" in response) {
           const paginatedResponse = response as PaginatedResponse<Chambre>;
           setPagination({
             page: paginatedResponse.meta.page,
@@ -40,10 +45,10 @@ export function useChambres(filters?: ChambreFilters) {
           });
         }
       } else {
-        setError(response.error || 'Erreur lors du chargement des chambres');
+        setError(response.error || "Erreur lors du chargement des chambres");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -80,16 +85,16 @@ export function useChambre(id: string | null) {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await chambreService.getById(id);
-      
+
       if (response.success && response.data) {
         setChambre(response.data);
       } else {
-        setError(response.error || 'Erreur lors du chargement de la chambre');
+        setError(response.error || "Erreur lors du chargement de la chambre");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -127,16 +132,18 @@ export function useChambresStats() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await chambreService.getStatistiques();
-      
+
       if (response.success && response.data) {
         setStats(response.data);
       } else {
-        setError(response.error || 'Erreur lors du chargement des statistiques');
+        setError(
+          response.error || "Erreur lors du chargement des statistiques"
+        );
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -166,17 +173,17 @@ export function useChambresActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await chambreService.create(data);
-      
+
       if (response.success) {
         return response.data;
       } else {
-        setError(response.error || 'Erreur lors de la création');
-        throw new Error(response.error || 'Erreur lors de la création');
+        setError(response.error || "Erreur lors de la création");
+        throw new Error(response.error || "Erreur lors de la création");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -188,17 +195,17 @@ export function useChambresActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await chambreService.update(id, data);
-      
+
       if (response.success) {
         return response.data;
       } else {
-        setError(response.error || 'Erreur lors de la mise à jour');
-        throw new Error(response.error || 'Erreur lors de la mise à jour');
+        setError(response.error || "Erreur lors de la mise à jour");
+        throw new Error(response.error || "Erreur lors de la mise à jour");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -210,15 +217,15 @@ export function useChambresActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await chambreService.delete(id);
-      
+
       if (!response.success) {
-        setError(response.error || 'Erreur lors de la suppression');
-        throw new Error(response.error || 'Erreur lors de la suppression');
+        setError(response.error || "Erreur lors de la suppression");
+        throw new Error(response.error || "Erreur lors de la suppression");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -226,27 +233,32 @@ export function useChambresActions() {
     }
   }, []);
 
-  const updateStatut = useCallback(async (id: string, statut: Chambre['statut']) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await chambreService.updateStatut(id, statut);
-      
-      if (response.success) {
-        return response.data;
-      } else {
-        setError(response.error || 'Erreur lors de la mise à jour du statut');
-        throw new Error(response.error || 'Erreur lors de la mise à jour du statut');
+  const updateStatut = useCallback(
+    async (id: string, statut: Chambre["statut"]) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await chambreService.updateStatut(id, statut);
+
+        if (response.success) {
+          return response.data;
+        } else {
+          setError(response.error || "Erreur lors de la mise à jour du statut");
+          throw new Error(
+            response.error || "Erreur lors de la mise à jour du statut"
+          );
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Erreur inconnue";
+        setError(message);
+        throw err;
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
-      setError(message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   return {
     loading,
@@ -272,25 +284,25 @@ export function useChambresParStatut() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const [libresResponse, loueesResponse] = await Promise.all([
         chambreService.getChambresLibres(),
         chambreService.getChambresLouees(),
       ]);
-      
+
       if (libresResponse.success && libresResponse.data) {
         setChambresLibres(libresResponse.data);
       }
-      
+
       if (loueesResponse.success && loueesResponse.data) {
         setChambresLouees(loueesResponse.data);
       }
-      
+
       if (!libresResponse.success || !loueesResponse.success) {
-        setError('Erreur lors du chargement des chambres par statut');
+        setError("Erreur lors du chargement des chambres par statut");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }

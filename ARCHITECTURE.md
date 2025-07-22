@@ -20,6 +20,7 @@ src/
 ## 🎯 Types et Modèles (`src/types/models.ts`)
 
 ### Entités principales
+
 - **Bien**: Propriétés immobilières avec gestion de statut
 - **Chambre**: Unités locatives avec tarification et équipements
 - **Locataire**: Informations des locataires et contacts
@@ -29,6 +30,7 @@ src/
 - **Travaux**: Maintenance et améliorations
 
 ### Types utilitaires
+
 - **DTOs**: Types pour formulaires (Create/Update)
 - **Filters**: Types pour la filtration et recherche
 - **API Responses**: Formats standardisés pour l'API
@@ -37,7 +39,9 @@ src/
 ## 🔧 Services (`src/services/`)
 
 ### Architecture des services
+
 Chaque service suit le pattern **Repository** avec:
+
 - Interface TypeScript définissant le contrat
 - Implémentation avec gestion d'erreurs
 - Méthodes CRUD standardisées
@@ -47,6 +51,7 @@ Chaque service suit le pattern **Repository** avec:
 ### Services disponibles
 
 #### `ChambreService`
+
 ```typescript
 // CRUD Operations
 getAll(filters?: ChambreFilters): Promise<PaginatedResponse<Chambre>>
@@ -62,6 +67,7 @@ getStatistiques(): Promise<ApiResponse<Stats>>
 ```
 
 #### `LocataireService`
+
 ```typescript
 // CRUD + Business
 getAll, getById, create, update, delete
@@ -71,6 +77,7 @@ uploadDocument(id: string, document: File, type: string)
 ```
 
 #### `PropManagerService` (Façade)
+
 ```typescript
 // Opérations transversales
 getDashboard(): Promise<DashboardData>
@@ -84,46 +91,50 @@ verifierConnectivite(): Promise<ConnectivityStatus>
 ### Hooks d'entités
 
 #### `useChambres(filters?)`
+
 ```typescript
 const {
-  chambres,        // Chambre[]
-  loading,         // boolean
-  error,           // string | null
-  pagination,      // { page, totalPages, total, hasNext, hasPrev }
-  refetch          // () => Promise<void>
-} = useChambres({ statut: 'libre' });
+  chambres, // Chambre[]
+  loading, // boolean
+  error, // string | null
+  pagination, // { page, totalPages, total, hasNext, hasPrev }
+  refetch, // () => Promise<void>
+} = useChambres({ statut: "libre" });
 ```
 
 #### `useChambresActions()`
+
 ```typescript
 const {
   loading,
   error,
-  createChambre,   // (data) => Promise<Chambre>
-  updateChambre,   // (id, data) => Promise<Chambre>
-  deleteChambre,   // (id) => Promise<void>
-  updateStatut     // (id, statut) => Promise<Chambre>
+  createChambre, // (data) => Promise<Chambre>
+  updateChambre, // (id, data) => Promise<Chambre>
+  deleteChambre, // (id) => Promise<void>
+  updateStatut, // (id, statut) => Promise<Chambre>
 } = useChambresActions();
 ```
 
 ### Hooks globaux
 
 #### `usePropManager()`
+
 ```typescript
 const {
-  dashboard,       // Hook pour tableau de bord
-  globalSearch,    // Hook pour recherche globale
-  dataSync,        // Hook pour synchronisation
-  connectivity,    // Hook pour vérification connectivité
-  isLoading,       // État global de chargement
-  hasErrors,       // Indicateur d'erreurs
-  errors           // Liste des erreurs
+  dashboard, // Hook pour tableau de bord
+  globalSearch, // Hook pour recherche globale
+  dataSync, // Hook pour synchronisation
+  connectivity, // Hook pour vérification connectivité
+  isLoading, // État global de chargement
+  hasErrors, // Indicateur d'erreurs
+  errors, // Liste des erreurs
 } = usePropManager();
 ```
 
 ### Hooks utilitaires
 
 #### `useAsyncState<T>()`
+
 ```typescript
 const { data, loading, error, execute, reset } = useAsyncState<User>();
 
@@ -134,35 +145,38 @@ const handleSubmit = () => {
 ```
 
 #### `useFormState<T>(initialValues, validator?)`
+
 ```typescript
 const {
-  values,          // Valeurs du formulaire
-  errors,          // Erreurs de validation
-  touched,         // Champs touchés
-  setValue,        // Mettre à jour une valeur
-  setTouched,      // Marquer un champ comme touché
-  validate,        // Valider le formulaire
-  reset,           // Réinitialiser
-  isValid          // Formulaire valide?
-} = useFormState({ nom: '', email: '' }, validateUser);
+  values, // Valeurs du formulaire
+  errors, // Erreurs de validation
+  touched, // Champs touchés
+  setValue, // Mettre à jour une valeur
+  setTouched, // Marquer un champ comme touché
+  validate, // Valider le formulaire
+  reset, // Réinitialiser
+  isValid, // Formulaire valide?
+} = useFormState({ nom: "", email: "" }, validateUser);
 ```
 
 #### `useNotifications()`
+
 ```typescript
 const {
-  notifications,   // Liste des notifications
-  success,         // (message, duration?) => void
-  error,           // (message, duration?) => void
-  warning,         // (message, duration?) => void
-  info,            // (message, duration?) => void
+  notifications, // Liste des notifications
+  success, // (message, duration?) => void
+  error, // (message, duration?) => void
+  warning, // (message, duration?) => void
+  info, // (message, duration?) => void
   removeNotification,
-  clearAll
+  clearAll,
 } = useNotifications();
 ```
 
 ## 🛠️ Utilitaires (`src/utils/index.ts`)
 
 ### Validation
+
 ```typescript
 isValidEmail(email: string): boolean
 isValidPhoneFR(phone: string): boolean
@@ -172,6 +186,7 @@ isValidBirthDate(dateString: string): boolean
 ```
 
 ### Formatage
+
 ```typescript
 formatCurrency(amount: number): string           // "1 234,56 €"
 formatDateFR(dateString: string): string         // "15/03/2024"
@@ -180,6 +195,7 @@ formatPercentage(value: number): string          // "85.5 %"
 ```
 
 ### Calculs métier
+
 ```typescript
 calculateAge(birthDateString: string): number
 calculateRendement(revenuAnnuel: number, prixAchat: number): number
@@ -188,6 +204,7 @@ calculateLoyerTotal(loyer: number, charges: number): number
 ```
 
 ### Manipulation de données
+
 ```typescript
 searchText(text: string, query: string): boolean    // Recherche insensible casse/accents
 sortByProperty<T>(array: T[], property: keyof T, direction?: 'asc'|'desc'): T[]
@@ -200,15 +217,15 @@ debounce<T>(func: T, wait: number): T                // Optimisation performance
 ### 1. Affichage d'une liste de chambres avec filtres
 
 ```typescript
-import React from 'react';
-import { useChambres } from '@/hooks';
-import { formatCurrency } from '@/utils';
+import React from "react";
+import { useChambres } from "@/hooks";
+import { formatCurrency } from "@/utils";
 
 const ChambresList: React.FC = () => {
   const { chambres, loading, error, pagination } = useChambres({
-    statut: 'libre',
+    statut: "libre",
     page: 1,
-    limit: 10
+    limit: 10,
   });
 
   if (loading) return <div>Chargement...</div>;
@@ -216,16 +233,14 @@ const ChambresList: React.FC = () => {
 
   return (
     <div>
-      {chambres.map(chambre => (
+      {chambres.map((chambre) => (
         <div key={chambre.id}>
           <h3>{chambre.nom}</h3>
           <p>{formatCurrency(chambre.loyer_mensuel)}/mois</p>
-          <span className={`statut-${chambre.statut}`}>
-            {chambre.statut}
-          </span>
+          <span className={`statut-${chambre.statut}`}>{chambre.statut}</span>
         </div>
       ))}
-      
+
       <div>
         Page {pagination.page} sur {pagination.totalPages}
         Total: {pagination.total} chambres
@@ -238,22 +253,22 @@ const ChambresList: React.FC = () => {
 ### 2. Formulaire de création de locataire
 
 ```typescript
-import React from 'react';
-import { useLocatairesActions, useFormState, useNotifications } from '@/hooks';
-import { isValidEmail } from '@/utils';
+import React from "react";
+import { useLocatairesActions, useFormState, useNotifications } from "@/hooks";
+import { isValidEmail } from "@/utils";
 
 const CreateLocataireForm: React.FC = () => {
   const { createLocataire, loading } = useLocatairesActions();
   const { success, error } = useNotifications();
-  
+
   const { values, errors, setValue, validate } = useFormState(
-    { nom: '', prenom: '', email: '', telephone: '' },
+    { nom: "", prenom: "", email: "", telephone: "" },
     (data) => {
       const errors: Record<string, string> = {};
-      if (!data.nom) errors.nom = 'Le nom est requis';
-      if (!data.prenom) errors.prenom = 'Le prénom est requis';
+      if (!data.nom) errors.nom = "Le nom est requis";
+      if (!data.prenom) errors.prenom = "Le prénom est requis";
       if (data.email && !isValidEmail(data.email)) {
-        errors.email = 'Email invalide';
+        errors.email = "Email invalide";
       }
       return errors;
     }
@@ -265,9 +280,9 @@ const CreateLocataireForm: React.FC = () => {
 
     try {
       await createLocataire(values);
-      success('Locataire créé avec succès');
+      success("Locataire créé avec succès");
     } catch (err) {
-      error('Erreur lors de la création');
+      error("Erreur lors de la création");
     }
   };
 
@@ -275,20 +290,20 @@ const CreateLocataireForm: React.FC = () => {
     <form onSubmit={handleSubmit}>
       <input
         value={values.nom}
-        onChange={(e) => setValue('nom', e.target.value)}
+        onChange={(e) => setValue("nom", e.target.value)}
         placeholder="Nom"
       />
       {errors.nom && <span className="error">{errors.nom}</span>}
-      
+
       <input
         value={values.prenom}
-        onChange={(e) => setValue('prenom', e.target.value)}
+        onChange={(e) => setValue("prenom", e.target.value)}
         placeholder="Prénom"
       />
       {errors.prenom && <span className="error">{errors.prenom}</span>}
-      
+
       <button type="submit" disabled={loading}>
-        {loading ? 'Création...' : 'Créer'}
+        {loading ? "Création..." : "Créer"}
       </button>
     </form>
   );
@@ -298,9 +313,9 @@ const CreateLocataireForm: React.FC = () => {
 ### 3. Dashboard avec statistiques
 
 ```typescript
-import React from 'react';
-import { useDashboard } from '@/hooks';
-import { formatCurrency, formatPercentage } from '@/utils';
+import React from "react";
+import { useDashboard } from "@/hooks";
+import { formatCurrency, formatPercentage } from "@/utils";
 
 const Dashboard: React.FC = () => {
   const { dashboard, loading, error, refetch } = useDashboard();
@@ -319,7 +334,7 @@ const Dashboard: React.FC = () => {
             {dashboard.chambres?.libres || 0} libres
           </p>
         </div>
-        
+
         <div className="stat-card">
           <h3>Locataires</h3>
           <p className="stat-value">{dashboard.locataires?.total || 0}</p>
@@ -327,14 +342,14 @@ const Dashboard: React.FC = () => {
             {dashboard.locataires?.actifs || 0} actifs
           </p>
         </div>
-        
+
         <div className="stat-card">
           <h3>Revenus mensuels</h3>
           <p className="stat-value">
             {formatCurrency(dashboard.resume.revenus_mensuels)}
           </p>
         </div>
-        
+
         <div className="stat-card">
           <h3>Taux d'occupation</h3>
           <p className="stat-value">
@@ -342,7 +357,7 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
       </div>
-      
+
       <button onClick={refetch}>Actualiser</button>
     </div>
   );
@@ -352,22 +367,26 @@ const Dashboard: React.FC = () => {
 ## 🚀 Prochaines étapes
 
 ### 1. Migration des composants existants
+
 - [ ] Convertir les composants JavaScript en TypeScript
 - [ ] Ajouter les props types et interfaces
 - [ ] Utiliser les nouveaux hooks au lieu des anciens services
 
 ### 2. Intégration des services
+
 - [ ] Connecter les composants aux nouveaux services
 - [ ] Remplacer les appels API directs par les services
 - [ ] Implémenter la gestion d'erreurs globale
 
 ### 3. Améliorations
+
 - [ ] Ajouter des tests unitaires pour les services et hooks
 - [ ] Implémenter un système de cache pour les données
 - [ ] Ajouter la gestion de l'authentification
 - [ ] Optimiser les performances avec React.memo et useMemo
 
 ### 4. Fonctionnalités avancées
+
 - [ ] Système de notifications en temps réel
 - [ ] Export/import de données
 - [ ] Rapports et analytics avancés

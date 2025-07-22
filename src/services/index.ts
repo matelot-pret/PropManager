@@ -1,6 +1,6 @@
-import bienService from './BienService';
-import chambreService from './ChambreService';
-import locataireService from './LocataireService';
+import bienService from "./BienService";
+import chambreService from "./ChambreService";
+import locataireService from "./LocataireService";
 
 // ===========================================
 // SERVICE PRINCIPAL - FAÇADE
@@ -21,11 +21,7 @@ export class PropManagerService {
    */
   async getDashboard() {
     try {
-      const [
-        statsBiens,
-        statsChambres,
-        statsLocataires,
-      ] = await Promise.all([
+      const [statsBiens, statsChambres, statsLocataires] = await Promise.all([
         this.biens.getStatistiques(),
         this.chambres.getStatistiques(),
         this.locataires.getStatistiques(),
@@ -47,10 +43,10 @@ export class PropManagerService {
         },
       };
     } catch (error) {
-      console.error('Erreur lors de la récupération du dashboard:', error);
+      console.error("Erreur lors de la récupération du dashboard:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Erreur inconnue',
+        error: error instanceof Error ? error.message : "Erreur inconnue",
       };
     }
   }
@@ -60,10 +56,7 @@ export class PropManagerService {
    */
   async rechercheGlobale(terme: string) {
     try {
-      const [
-        resultsBiens,
-        resultsLocataires,
-      ] = await Promise.all([
+      const [resultsBiens, resultsLocataires] = await Promise.all([
         this.biens.rechercher(terme),
         this.locataires.rechercher(terme),
       ]);
@@ -73,14 +66,16 @@ export class PropManagerService {
         data: {
           biens: resultsBiens.data,
           locataires: resultsLocataires.data,
-          total: (resultsBiens.data?.length || 0) + (resultsLocataires.data?.length || 0),
+          total:
+            (resultsBiens.data?.length || 0) +
+            (resultsLocataires.data?.length || 0),
         },
       };
     } catch (error) {
-      console.error('Erreur lors de la recherche globale:', error);
+      console.error("Erreur lors de la recherche globale:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Erreur inconnue',
+        error: error instanceof Error ? error.message : "Erreur inconnue",
       };
     }
   }
@@ -99,23 +94,24 @@ export class PropManagerService {
       // Logique de vérification (exemple)
       if (chambresLouees.data && locatairesActifs.data) {
         // Vérifications de cohérence à implémenter selon le modèle de données
-        console.log('Vérification des données...');
+        console.log("Vérification des données...");
       }
 
       return {
         success: true,
         data: {
           incoherences,
-          message: incoherences.length === 0 
-            ? 'Données synchronisées avec succès' 
-            : `${incoherences.length} incohérence(s) détectée(s)`,
+          message:
+            incoherences.length === 0
+              ? "Données synchronisées avec succès"
+              : `${incoherences.length} incohérence(s) détectée(s)`,
         },
       };
     } catch (error) {
-      console.error('Erreur lors de la synchronisation:', error);
+      console.error("Erreur lors de la synchronisation:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Erreur inconnue',
+        error: error instanceof Error ? error.message : "Erreur inconnue",
       };
     }
   }
@@ -127,7 +123,7 @@ export class PropManagerService {
     try {
       // Cette méthode nécessiterait des endpoints spécifiques côté API
       // pour obtenir les données d'activité sur une période donnée
-      
+
       return {
         success: true,
         data: {
@@ -139,10 +135,10 @@ export class PropManagerService {
         },
       };
     } catch (error) {
-      console.error('Erreur lors de la génération du rapport:', error);
+      console.error("Erreur lors de la génération du rapport:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Erreur inconnue',
+        error: error instanceof Error ? error.message : "Erreur inconnue",
       };
     }
   }
@@ -168,25 +164,31 @@ export class PropManagerService {
     try {
       // Test des services individuels
       await Promise.allSettled([
-        this.biens.getAll().then(() => { tests.biens = true; }),
-        this.chambres.getAll().then(() => { tests.chambres = true; }),
-        this.locataires.getAll().then(() => { tests.locataires = true; }),
+        this.biens.getAll().then(() => {
+          tests.biens = true;
+        }),
+        this.chambres.getAll().then(() => {
+          tests.chambres = true;
+        }),
+        this.locataires.getAll().then(() => {
+          tests.locataires = true;
+        }),
       ]);
 
-      const allConnected = Object.values(tests).every(status => status);
-      
+      const allConnected = Object.values(tests).every((status) => status);
+
       return {
         success: allConnected,
         services: tests,
-        message: allConnected 
-          ? 'Tous les services sont accessibles'
-          : 'Certains services ne sont pas accessibles',
+        message: allConnected
+          ? "Tous les services sont accessibles"
+          : "Certains services ne sont pas accessibles",
       };
     } catch (error) {
       return {
         success: false,
         services: tests,
-        message: 'Erreur lors de la vérification de connectivité',
+        message: "Erreur lors de la vérification de connectivité",
       };
     }
   }
@@ -196,7 +198,7 @@ export class PropManagerService {
    */
   clearCache(): void {
     // Implémentation du cache à ajouter selon les besoins
-    console.log('Cache effacé');
+    console.log("Cache effacé");
   }
 
   /**
@@ -208,7 +210,7 @@ export class PropManagerService {
     retries?: number;
   }): void {
     // Configuration globale des services
-    console.log('Services configurés avec:', options);
+    console.log("Services configurés avec:", options);
   }
 }
 

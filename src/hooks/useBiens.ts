@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Bien, BienFilters, PaginatedResponse } from '@/types/models';
-import { bienService } from '@/services';
+import { useState, useEffect, useCallback } from "react";
+import { Bien, BienFilters, PaginatedResponse } from "@/types/models";
+import { bienService } from "@/services";
 
 // ===========================================
 // HOOK PRINCIPAL POUR LES BIENS
@@ -22,14 +22,14 @@ export function useBiens(filters?: BienFilters) {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await bienService.getAll(filters);
-      
+
       if (response.success && response.data) {
         setBiens(response.data);
-        
+
         // Si c'est une réponse paginée
-        if ('meta' in response) {
+        if ("meta" in response) {
           const paginatedResponse = response as PaginatedResponse<Bien>;
           setPagination({
             page: paginatedResponse.meta.page,
@@ -40,10 +40,10 @@ export function useBiens(filters?: BienFilters) {
           });
         }
       } else {
-        setError(response.error || 'Erreur lors du chargement des biens');
+        setError(response.error || "Erreur lors du chargement des biens");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -80,16 +80,16 @@ export function useBien(id: string | null) {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await bienService.getById(id);
-      
+
       if (response.success && response.data) {
         setBien(response.data);
       } else {
-        setError(response.error || 'Erreur lors du chargement du bien');
+        setError(response.error || "Erreur lors du chargement du bien");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -127,16 +127,18 @@ export function useBiensStats() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await bienService.getStatistiques();
-      
+
       if (response.success && response.data) {
         setStats(response.data);
       } else {
-        setError(response.error || 'Erreur lors du chargement des statistiques');
+        setError(
+          response.error || "Erreur lors du chargement des statistiques"
+        );
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -166,23 +168,23 @@ export function useBiensActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const validation = bienService.validateBienData(data);
       if (!validation.valid) {
-        setError(validation.errors.join(', '));
-        throw new Error(validation.errors.join(', '));
+        setError(validation.errors.join(", "));
+        throw new Error(validation.errors.join(", "));
       }
-      
+
       const response = await bienService.create(data);
-      
+
       if (response.success) {
         return response.data;
       } else {
-        setError(response.error || 'Erreur lors de la création');
-        throw new Error(response.error || 'Erreur lors de la création');
+        setError(response.error || "Erreur lors de la création");
+        throw new Error(response.error || "Erreur lors de la création");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -194,23 +196,23 @@ export function useBiensActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const validation = bienService.validateBienData(data);
       if (!validation.valid) {
-        setError(validation.errors.join(', '));
-        throw new Error(validation.errors.join(', '));
+        setError(validation.errors.join(", "));
+        throw new Error(validation.errors.join(", "));
       }
-      
+
       const response = await bienService.update(id, data);
-      
+
       if (response.success) {
         return response.data;
       } else {
-        setError(response.error || 'Erreur lors de la mise à jour');
-        throw new Error(response.error || 'Erreur lors de la mise à jour');
+        setError(response.error || "Erreur lors de la mise à jour");
+        throw new Error(response.error || "Erreur lors de la mise à jour");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -222,15 +224,15 @@ export function useBiensActions() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await bienService.delete(id);
-      
+
       if (!response.success) {
-        setError(response.error || 'Erreur lors de la suppression');
-        throw new Error(response.error || 'Erreur lors de la suppression');
+        setError(response.error || "Erreur lors de la suppression");
+        throw new Error(response.error || "Erreur lors de la suppression");
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
       setError(message);
       throw err;
     } finally {
@@ -238,27 +240,32 @@ export function useBiensActions() {
     }
   }, []);
 
-  const updateStatut = useCallback(async (id: string, statut: Bien['statut']) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await bienService.updateStatut(id, statut);
-      
-      if (response.success) {
-        return response.data;
-      } else {
-        setError(response.error || 'Erreur lors de la mise à jour du statut');
-        throw new Error(response.error || 'Erreur lors de la mise à jour du statut');
+  const updateStatut = useCallback(
+    async (id: string, statut: Bien["statut"]) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await bienService.updateStatut(id, statut);
+
+        if (response.success) {
+          return response.data;
+        } else {
+          setError(response.error || "Erreur lors de la mise à jour du statut");
+          throw new Error(
+            response.error || "Erreur lors de la mise à jour du statut"
+          );
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Erreur inconnue";
+        setError(message);
+        throw err;
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue';
-      setError(message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   return {
     loading,
@@ -288,17 +295,17 @@ export function useBiensSearch() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await bienService.rechercher(terme);
-      
+
       if (response.success && response.data) {
         setResults(response.data);
       } else {
-        setError(response.error || 'Erreur lors de la recherche');
+        setError(response.error || "Erreur lors de la recherche");
         setResults([]);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : "Erreur inconnue");
       setResults([]);
     } finally {
       setLoading(false);
