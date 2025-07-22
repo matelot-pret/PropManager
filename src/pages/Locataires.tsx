@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { Locataire, Chambre } from "@/entities/all";
-import { Button } from "@/components/ui/button";
-import { Plus, Users } from "lucide-react";
+import { useState, useEffect } from "react";
+import type { Locataire } from "@/types/models";
+import type { Chambre } from "@/types/models";
+import Button from "../components/ui/button";
+import locataireService from "@/services/LocataireService";
+import chambreService from "@/services/ChambreService";
+import { Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import LocataireForm from "../components/locataires/LocataireForm";
 import LocataireList from "../components/locataires/LocataireList";
 
 export default function Locataires() {
-  const [locataires, setLocataires] = useState([]);
-  const [chambresDisponibles, setChambresDisponibles] = useState([]);
+  const [locataires, setLocataires] = useState<Locataire[]>([]);
+  const [chambresDisponibles, setChambresDisponibles] = useState<Chambre[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [editingLocataire, setEditingLocataire] = useState(null);
+  const [editingLocataire, setEditingLocataire] = useState<Locataire | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -21,39 +26,47 @@ export default function Locataires() {
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const locatairesData = await Locataire.list("-created_date");
-      setLocataires(locatairesData);
-      const chambresData = await Chambre.filter({ statut: "libre" });
-      setChambresDisponibles(chambresData);
+      const locatairesRes = await locataireService.getAll({ statut: "actif" });
+      setLocataires(locatairesRes.data || []);
+      const chambresRes = await chambreService.getAll({ statut: "libre" });
+      setChambresDisponibles(chambresRes.data || []);
     } catch (error) {
       console.error("Erreur lors du chargement des données:", error);
     }
     setIsLoading(false);
   };
 
-  const handleSubmit = async (locataireData) => {
+  const handleSubmit = async (locataireData: any) => {
     if (editingLocataire) {
-      await Locataire.update(editingLocataire.id, locataireData);
+      await locataireService.update(editingLocataire.id, locataireData);
     } else {
-      await Locataire.create(locataireData);
-      // Mettre à jour le statut de la chambre
-      await Chambre.update(locataireData.chambre_id, { statut: "louee" });
+      // S'assurer que le statut est défini pour la création
+      const dataToCreate = {
+        ...locataireData,
+        statut: locataireData.statut || "actif",
+      };
+      await locataireService.create(dataToCreate);
+      if (locataireData.chambre_id) {
+        await chambreService.update(locataireData.chambre_id, {
+          statut: "louee",
+        });
+      }
     }
     setShowForm(false);
     setEditingLocataire(null);
     loadData();
   };
 
-  const handleEdit = (locataire) => {
+  const handleEdit = (locataire: Locataire) => {
     setEditingLocataire(locataire);
     setShowForm(true);
   };
 
-  const handleDelete = async (locataire) => {
-    await Locataire.delete(locataire.id);
+  const handleDelete = async (locataire: Locataire) => {
+    await locataireService.delete(locataire.id);
     // Libérer la chambre
     if (locataire.chambre_id) {
-      await Chambre.update(locataire.chambre_id, { statut: "libre" });
+      await chambreService.update(locataire.chambre_id, { statut: "libre" });
     }
     loadData();
   };

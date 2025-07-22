@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { Chambre, Bien, Locataire, ContratBail, Loyer } from "@/entities/all";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import chambreService from "../services/ChambreService";
+import bienService from "../services/BienService";
+import locataireService from "../services/LocataireService";
+import contratBailService from "../services/ContratBailService";
+import loyerService from "../services/LoyerService";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import Button from "../components/ui/button";
+import Badge from "../components/ui/badge";
 import {
   ArrowLeft,
   BedDouble,
   User,
   Euro,
   Calendar,
-  Phone,
-  Mail,
-  Users,
   Edit,
   FileText,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton";
-import { createPageUrl } from "@/utils";
-import { format } from "date-fns";
-import fr from "date-fns/locale/fr";
+import Skeleton from "../components/ui/skeleton";
+import { createPageUrl } from "../utils";
 
 import ChambreInfoCard from "../components/chambres/ChambreInfoCard";
 import LocataireInfoCard from "../components/chambres/LocataireInfoCard";
 import ContratInfoCard from "../components/chambres/ContratInfoCard";
-import LooyersHistorique from "../components/chambres/LooyersHistorique";
+import LoyerHistorique from "../components/chambres/LoyerHistorique";
 
 export default function ChambreDetails() {
   const location = useLocation();
@@ -33,50 +37,52 @@ export default function ChambreDetails() {
   const chambreId = urlParams.get("id");
   const bienId = urlParams.get("bien_id");
 
-  const [chambre, setChambre] = useState(null);
-  const [bien, setBien] = useState(null);
-  const [locataire, setLocataire] = useState(null);
-  const [contrat, setContrat] = useState(null);
-  const [loyers, setLoyers] = useState([]);
+  const [chambre, setChambre] = useState<any>(null);
+  const [bien, setBien] = useState<any>(null);
+  const [locataire, setLocataire] = useState<any>(null);
+  const [contrat, setContrat] = useState<any>(null);
+  const [loyers, setLoyers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (chambreId) {
-      loadChambreDetails();
-    }
+    if (!chambreId) return;
+    loadChambreDetails();
   }, [chambreId]);
 
   const loadChambreDetails = async () => {
+    if (!chambreId) return;
     setIsLoading(true);
     try {
       // Charger la chambre
-      const chambreData = await Chambre.get(chambreId);
-      setChambre(chambreData);
+      const chambreRes = await chambreService.getById(chambreId as string);
+      if (!chambreRes.data) throw new Error("Chambre introuvable");
+      setChambre(chambreRes.data);
 
       // Charger le bien
-      const bienData = await Bien.get(chambreData.bien_id);
-      setBien(bienData);
+      const bienRes = await bienService.getById(chambreRes.data.bien_id);
+      setBien(bienRes.data);
 
       // Charger le contrat actif pour cette chambre
-      const contratsActifs = await ContratBail.filter({
+      // Remplacer getAll par filter si nécessaire
+      const contrats = await contratBailService.filter({
         chambre_id: chambreId,
         statut: "actif",
       });
-
-      if (contratsActifs.length > 0) {
-        const contratActif = contratsActifs[0];
+      if (contrats && contrats.length > 0) {
+        const contratActif = contrats[0];
         setContrat(contratActif);
 
         // Charger le locataire
-        const locataireData = await Locataire.get(contratActif.locataire_id);
-        setLocataire(locataireData);
+        const locataireRes = await locataireService.getById(
+          contratActif.locataire_id
+        );
+        setLocataire(locataireRes.data);
 
         // Charger l'historique des loyers
-        const loyersData = await Loyer.filter(
-          { chambre_id: chambreId },
-          "-annee,-mois"
-        );
-        setLoyers(loyersData);
+        const loyersRes = await loyerService.getAll({
+          chambre_id: chambreId as string,
+        });
+        setLoyers(loyersRes.data || []);
       }
     } catch (error) {
       console.error(
@@ -90,15 +96,18 @@ export default function ChambreDetails() {
   if (isLoading) {
     return (
       <div className="p-8 max-w-7xl mx-auto">
-        <Skeleton className="h-8 w-1/4 mb-4" />
-        <Skeleton className="h-6 w-1/2 mb-8" />
+        <Skeleton width={200} height={32} />
+        <Skeleton width={300} height={24} />
         <div className="grid lg:grid-cols-3 gap-6">
           {Array(3)
             .fill(0)
             .map((_, i) => (
-              <Card key={i} className="border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <Skeleton className="h-32 w-full" />
+              <Card
+                key={i}
+                style={{ border: 0, boxShadow: "0 2px 8px #e0e0e0" }}
+              >
+                <CardContent>
+                  <Skeleton width={300} height={64} />
                 </CardContent>
               </Card>
             ))}
@@ -113,8 +122,8 @@ export default function ChambreDetails() {
         <h1 className="text-2xl font-bold text-slate-900 mb-4">
           Chambre non trouvée
         </h1>
-        <Link to={createPageUrl("Biens")}>
-          <Button variant="outline">
+        <Link to={createPageUrl("Biens", {})}>
+          <Button>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Retour aux biens
           </Button>
@@ -131,7 +140,7 @@ export default function ChambreDetails() {
           animate={{ opacity: 1, y: 0 }}
         >
           <Link
-            to={createPageUrl(`BienDetails?id=${bien?.id}`)}
+            to={createPageUrl("BienDetails", { id: bien?.id })}
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -158,7 +167,7 @@ export default function ChambreDetails() {
               >
                 {chambre.statut === "louee" ? "Occupée" : "Libre"}
               </Badge>
-              <Button variant="outline" size="sm">
+              <Button>
                 <Edit className="w-4 h-4 mr-2" />
                 Modifier
               </Button>
@@ -173,7 +182,7 @@ export default function ChambreDetails() {
 
             {contrat && locataire && <ContratInfoCard contrat={contrat} />}
 
-            {loyers.length > 0 && <LooyersHistorique loyers={loyers} />}
+            {loyers.length > 0 && <LoyerHistorique loyers={loyers} />}
           </div>
 
           {/* Sidebar */}
@@ -207,15 +216,15 @@ export default function ChambreDetails() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 space-y-3">
-                <Button variant="outline" className="w-full justify-start">
+                <Button className="w-full justify-start">
                   <FileText className="w-4 h-4 mr-2" />
                   Générer un contrat
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button className="w-full justify-start">
                   <Euro className="w-4 h-4 mr-2" />
                   Enregistrer un paiement
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button className="w-full justify-start">
                   <Calendar className="w-4 h-4 mr-2" />
                   Planifier une visite
                 </Button>

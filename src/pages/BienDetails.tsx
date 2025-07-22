@@ -1,31 +1,26 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Bien, Chambre, Locataire, ContratBail } from "@/entities/all";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Plus,
-  ArrowLeft,
-  BedDouble,
-  Building,
-  Euro,
-  UserCheck,
-} from "lucide-react";
+import bienService from "../services/BienService";
+import chambreService from "../services/ChambreService";
+import contratBailService from "../services/ContratBailService";
+import locataireService from "../services/LocataireService";
+import Button from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
+import { Plus, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton";
-import { createPageUrl } from "@/utils";
-
-import ChambreList from "../components/biens/ChambreList";
+import Skeleton from "../components/ui/skeleton";
+import { createPageUrl } from "../utils";
 import ChambreForm from "../components/biens/ChambreForm";
+import ChambreList from "../components/biens/ChambreList";
 
 export default function BienDetails() {
   const { id } = useParams();
-  const [bien, setBien] = useState(null);
-  const [chambres, setChambres] = useState([]);
-  const [chambresDetails, setChambresDetails] = useState([]);
+  const [bien, setBien] = useState<any>(null);
+  // const [chambres, setChambres] = useState<any[]>([]);
+  const [chambresDetails, setChambresDetails] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editingChambre, setEditingChambre] = useState(null);
+  const [editingChambre, setEditingChambre] = useState<any>(null);
 
   useEffect(() => {
     if (id) {
@@ -36,23 +31,30 @@ export default function BienDetails() {
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const bienData = await Bien.get(id);
-      setBien(bienData);
+      const bienRes = await bienService.getById(id as string);
+      setBien(bienRes.data);
 
-      const chambresData = await Chambre.filter({ bien_id: id });
-      setChambres(chambresData);
+      const chambresRes = await chambreService.getAll({ bien_id: id });
+      const chambresList = chambresRes.data || [];
 
-      // Enrichir les chambres avec les détails des locataires
-      const contratsActifs = await ContratBail.filter({ statut: "actif" });
-      const locatairesActifs = await Locataire.filter({ statut: "actif" });
-
-      const details = chambresData.map((chambre) => {
-        const contrat = contratsActifs.find((c) => c.chambre_id === chambre.id);
+      // Enrichir les chambres avec les détails des locataires et contrats
+      // Si bien_id n'est pas supporté, retirez-le du filter
+      const contratsActifs = await contratBailService.filter({
+        statut: "actif",
+      });
+      const locatairesActifsRes = await locataireService.getAll({
+        statut: "actif",
+      });
+      const locatairesActifs = locatairesActifsRes.data || [];
+      const details = chambresList.map((chambre: any) => {
+        const contrat = contratsActifs.find(
+          (c: any) => c.chambre_id === chambre.id
+        );
         if (contrat) {
           const locataire = locatairesActifs.find(
-            (l) => l.id === contrat.locataire_id
+            (l: any) => l.id === contrat.locataire_id
           );
-          return { ...chambre, locataire: locataire, contrat: contrat };
+          return { ...chambre, locataire, contrat };
         }
         return chambre;
       });
@@ -63,39 +65,39 @@ export default function BienDetails() {
     setIsLoading(false);
   };
 
-  const handleChambreSubmit = async (chambreData) => {
+  const handleChambreSubmit = async (chambreData: any) => {
     if (editingChambre) {
-      await Chambre.update(editingChambre.id, chambreData);
+      await chambreService.update(editingChambre.id, chambreData);
     } else {
-      await Chambre.create({ ...chambreData, bien_id: id });
+      await chambreService.create({ ...chambreData, bien_id: id });
     }
     setShowForm(false);
     setEditingChambre(null);
     loadData();
   };
 
-  const handleEditChambre = (chambre) => {
+  const handleEditChambre = (chambre: any) => {
     setEditingChambre(chambre);
     setShowForm(true);
   };
 
-  const handleDeleteChambre = async (chambreId) => {
-    await Chambre.delete(chambreId);
+  const handleDeleteChambre = async (chambreId: string) => {
+    await chambreService.delete(chambreId);
     loadData();
   };
 
   if (isLoading) {
     return (
       <div className="p-8 max-w-7xl mx-auto">
-        <Skeleton className="h-10 w-1/4 mb-4" />
-        <Skeleton className="h-6 w-1/2 mb-8" />
+        <Skeleton width={200} height={40} />
+        <Skeleton width={300} height={24} />
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array(3)
             .fill(0)
             .map((_, i) => (
               <Card key={i}>
-                <CardContent className="p-6">
-                  <Skeleton className="h-32 w-full" />
+                <CardContent>
+                  <Skeleton width={300} height={64} />
                 </CardContent>
               </Card>
             ))}
@@ -116,7 +118,7 @@ export default function BienDetails() {
           animate={{ opacity: 1, y: 0 }}
         >
           <Link
-            to={createPageUrl("Biens")}
+            to={createPageUrl("Biens", {})}
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6"
           >
             <ArrowLeft className="w-4 h-4" />

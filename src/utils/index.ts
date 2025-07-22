@@ -1,4 +1,24 @@
 // ===========================================
+// UTILITAIRE DE CONSTRUCTION D'URL DE PAGE
+// ===========================================
+
+/**
+ * Génère une URL de page avec paramètres dynamiques
+ * @param path Le chemin de base (ex: "/biens/:id")
+ * @param params Un objet { id: "123" }
+ * @returns L'URL avec les paramètres injectés (ex: "/biens/123")
+ */
+export function createPageUrl(
+  path: string,
+  params: Record<string, string | number>
+): string {
+  let url = path;
+  Object.entries(params).forEach(([key, value]) => {
+    url = url.replace(`:${key}`, encodeURIComponent(String(value)));
+  });
+  return url;
+}
+// ===========================================
 // UTILITAIRES DE VALIDATION
 // ===========================================
 

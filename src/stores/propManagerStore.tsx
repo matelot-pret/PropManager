@@ -4,11 +4,11 @@
 
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { Bien } from "../entities/Bien";
-import { Chambre } from "../entities/Chambre";
-import { Locataire } from "../entities/Locataire";
-import { ContratBail } from "../entities/ContratBail";
-import { Loyer } from "../entities/Loyer";
+import type { IBien as Bien } from "../entities/Bien";
+import type { Chambre } from "../entities/Chambre";
+import type { Locataire } from "../entities/Locataire";
+import type { ContratBail } from "../entities/ContratBail";
+import type { Loyer } from "../entities/Loyer";
 import { useMemo } from "react";
 import BienList from "../components/biens/BienList";
 import ChambreList from "../components/biens/ChambreList";
@@ -19,23 +19,23 @@ const BienService = {
   list: async (): Promise<Bien[]> => [],
   create: async (b: Partial<Bien>): Promise<Bien> => ({
     id: "mock",
-    nom: b.nom || "Bien mock",
-    adresse: b.adresse || "Adresse mock",
-    type: b.type || "appartement",
-    surface: b.surface,
-    nb_pieces: b.nb_pieces,
-    description: b.description,
-    date_acquisition: b.date_acquisition,
+    nom: b?.nom || "Bien mock",
+    adresse: b?.adresse || "Adresse mock",
+    type: b?.type || "appartement",
+    surface: b?.surface,
+    nb_pieces: b?.nb_pieces,
+    description: b?.description,
+    date_acquisition: b?.date_acquisition,
   }),
   update: async (id: string, d: Partial<Bien>): Promise<Bien> => ({
     id,
-    nom: d.nom || "Bien mock",
-    adresse: d.adresse || "Adresse mock",
-    type: d.type || "appartement",
-    surface: d.surface,
-    nb_pieces: d.nb_pieces,
-    description: d.description,
-    date_acquisition: d.date_acquisition,
+    nom: d?.nom || "Bien mock",
+    adresse: d?.adresse || "Adresse mock",
+    type: d?.type || "appartement",
+    surface: d?.surface,
+    nb_pieces: d?.nb_pieces,
+    description: d?.description,
+    date_acquisition: d?.date_acquisition,
   }),
   delete: async (id: string): Promise<void> => {},
   get: async (id: string): Promise<Bien> => ({

@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from "react";
-import {
-  Bien,
-  Locataire,
-  ContratBail,
-  Loyer,
-  Travaux,
-  Facture,
-  Chambre,
-} from "@/entities/all";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import bienService from "../services/BienService";
+import locataireService from "../services/LocataireService";
+import contratBailService from "../services/ContratBailService";
+import loyerService from "../services/LoyerService";
+// Les services Travaux et Facture sont à créer si besoin, sinon remplacer par des mocks
 import {
   Building2,
   Users,
@@ -22,7 +17,7 @@ import { motion } from "framer-motion";
 import StatsCards from "../components/dashboard/StatsCards";
 import RecentActivity from "../components/dashboard/RecentActivity";
 import FinancialSummary from "../components/dashboard/FinancialSummary";
-import PropertyOverview from "../components/dashboard/PropertyOverview";
+import PropertiesOverview from "../components/dashboard/PropertiesOverview";
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -42,15 +37,21 @@ export default function Dashboard() {
   const loadDashboardData = async () => {
     setIsLoading(true);
     try {
-      const [biens, locataires, contrats, loyers, travaux, factures] =
+      // Remplacer par les méthodes de service correctes
+      const [biensRes, locatairesRes, contratsRes, loyersRes] =
         await Promise.all([
-          Bien.list(),
-          Locataire.list(),
-          ContratBail.filter({ statut: "actif" }),
-          Loyer.list(),
-          Travaux.list(),
-          Facture.list(),
+          bienService.getAll(),
+          locataireService.getAll(),
+          contratBailService.filter({ statut: "actif" }),
+          loyerService.getAll(),
         ]);
+      const biens = biensRes.data || [];
+      const locataires = locatairesRes.data || [];
+      const contrats = contratsRes || [];
+      const loyers = loyersRes.data || [];
+      // Pour travaux et factures, utiliser des tableaux vides ou créer les services
+      const travaux: any[] = [];
+      const factures: any[] = [];
 
       const loyersEnRetard = loyers.filter(
         (l) => l.statut === "en_retard"
@@ -103,6 +104,7 @@ export default function Dashboard() {
             icon={Building2}
             color="blue"
             isLoading={isLoading}
+            alert={false}
           />
           <StatsCards
             title="Locataires Actifs"
@@ -110,6 +112,7 @@ export default function Dashboard() {
             icon={Users}
             color="green"
             isLoading={isLoading}
+            alert={false}
           />
           <StatsCards
             title="Revenus Mensuels"
@@ -117,6 +120,7 @@ export default function Dashboard() {
             icon={Euro}
             color="purple"
             isLoading={isLoading}
+            alert={false}
           />
           <StatsCards
             title="Loyers en Retard"
@@ -140,6 +144,7 @@ export default function Dashboard() {
             icon={Calendar}
             color="indigo"
             isLoading={isLoading}
+            alert={false}
           />
         </div>
 
@@ -150,7 +155,7 @@ export default function Dashboard() {
           </div>
 
           <div className="space-y-8">
-            <PropertyOverview />
+            <PropertiesOverview />
           </div>
         </div>
       </div>
