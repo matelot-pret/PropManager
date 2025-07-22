@@ -1,16 +1,20 @@
-# PropManager
+# Pr## 📸 Aperçu
+
+![Interface PropManager - Gestion des biens](https://github.com/user-attachments/assets/interface-preview.png)
+
+_Interface moderne pour la gestion de votre patrimoine immobilier_
+
+> 💡 **Démo locale :** Ouvrez le fichier `demo.html` dans votre navigateur pour un aperçu interactif de l'interface.ager
 
 Gestion locative moderne, performante et typée.
 
-## 📸 Aperçu
+## � Aperçu
 
-*Interface moderne pour la gestion de votre patrimoine immobilier*
+![Interface PropManager - Gestion des biens](https://github.com/user-attachments/assets/interface-preview.png)
 
-![Aperçu de l’interface](./assets/interface-preview.png)
+_Interface moderne pour la gestion de votre patrimoine immobilier_
 
-> 💡 **Démo locale :** Ouvrez le fichier `demo.html` dans votre navigateur pour un aperçu interactif de l'interface.
-
-## 🚧 Migration TypeScript en cours
+## �🚧 Migration TypeScript en cours
 
 **État actuel :** Le projet est en cours de migration vers TypeScript (actuellement ~5% TypeScript, 40% JavaScript).
 
