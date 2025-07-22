@@ -1,18 +1,26 @@
-# Pr## 📸 Aperçu
+# 🏠 PropManager - Gestion Immobilière TypeScript
+
+Une application React TypeScript complète pour la gestion de biens immobiliers, locataires et contrats de location.
+
+## 📸 Aperçu
 
 ![Interface PropManager - Gestion des biens](https://github.com/user-attachments/assets/interface-preview.png)
 
 _Interface moderne pour la gestion de votre patrimoine immobilier_
 
-> 💡 **Démo locale :** Ouvrez le fichier `demo.html` dans votre navigateur pour un aperçu interactif de l'interface.ager
+> 💡 **Démo locale :** Ouvrez le fichier `demo.html` dans votre navigateur pour un aperçu interactif de l'interface.
 
-Gestion locative moderne, performante et typée.
+## 🏗️ Architecture TypeScript Complète
 
-## � Aperçu
+**État actuel :** Architecture TypeScript moderne avec services, hooks et utilitaires complets.
 
-![Interface PropManager - Gestion des biens](https://github.com/user-attachments/assets/interface-preview.png)
+### ✨ Nouvelles fonctionnalités
+- **Services typés** : ChambreService, LocataireService avec validation et gestion d'erreurs
+- **Hooks React** : useChambres, useLocataires, useDashboard avec état réactif
+- **Types stricts** : +200 lignes de définitions TypeScript pour toutes les entités
+- **Utilitaires** : Validation, formatage, calculs métier, optimisations performance
 
-_Interface moderne pour la gestion de votre patrimoine immobilier_
+📖 **[Guide complet de l'architecture](./ARCHITECTURE.md)**
 
 ## �🚧 Migration TypeScript en cours
 
