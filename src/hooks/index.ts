@@ -2,6 +2,15 @@
 // EXPORT DE TOUS LES HOOKS PERSONNALISÉS
 // ===========================================
 
+// Hooks pour les biens
+export {
+  useBiens,
+  useBien,
+  useBiensStats,
+  useBiensActions,
+  useBiensSearch,
+} from './useBiens';
+
 // Hooks pour les chambres
 export {
   useChambres,

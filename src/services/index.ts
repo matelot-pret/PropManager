@@ -1,3 +1,4 @@
+import bienService from './BienService';
 import chambreService from './ChambreService';
 import locataireService from './LocataireService';
 
@@ -7,6 +8,7 @@ import locataireService from './LocataireService';
 
 export class PropManagerService {
   // Services individuels
+  public readonly biens = bienService;
   public readonly chambres = chambreService;
   public readonly locataires = locataireService;
 
@@ -20,9 +22,11 @@ export class PropManagerService {
   async getDashboard() {
     try {
       const [
+        statsBiens,
         statsChambres,
         statsLocataires,
       ] = await Promise.all([
+        this.biens.getStatistiques(),
         this.chambres.getStatistiques(),
         this.locataires.getStatistiques(),
       ]);
@@ -30,9 +34,11 @@ export class PropManagerService {
       return {
         success: true,
         data: {
+          biens: statsBiens.data,
           chambres: statsChambres.data,
           locataires: statsLocataires.data,
           resume: {
+            total_biens: statsBiens.data?.total || 0,
             total_chambres: statsChambres.data?.total || 0,
             total_locataires: statsLocataires.data?.total || 0,
             revenus_mensuels: statsChambres.data?.revenus_mensuels || 0,
@@ -54,13 +60,20 @@ export class PropManagerService {
    */
   async rechercheGlobale(terme: string) {
     try {
-      const resultsLocataires = await this.locataires.rechercher(terme);
+      const [
+        resultsBiens,
+        resultsLocataires,
+      ] = await Promise.all([
+        this.biens.rechercher(terme),
+        this.locataires.rechercher(terme),
+      ]);
 
       return {
         success: true,
         data: {
+          biens: resultsBiens.data,
           locataires: resultsLocataires.data,
-          total: resultsLocataires.data?.length || 0,
+          total: (resultsBiens.data?.length || 0) + (resultsLocataires.data?.length || 0),
         },
       };
     } catch (error) {
@@ -147,6 +160,7 @@ export class PropManagerService {
     message: string;
   }> {
     const tests = {
+      biens: false,
       chambres: false,
       locataires: false,
     };
@@ -154,6 +168,7 @@ export class PropManagerService {
     try {
       // Test des services individuels
       await Promise.allSettled([
+        this.biens.getAll().then(() => { tests.biens = true; }),
         this.chambres.getAll().then(() => { tests.chambres = true; }),
         this.locataires.getAll().then(() => { tests.locataires = true; }),
       ]);
@@ -205,4 +220,4 @@ export const propManagerService = new PropManagerService();
 export default propManagerService;
 
 // Exports individuels pour compatibilité
-export { chambreService, locataireService };
+export { bienService, chambreService, locataireService };
